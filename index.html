@@ -18,28 +18,36 @@
 
     <!-- NAVBAR -->
     <nav class="glass-header text-white shadow-lg sticky top-0 z-40 border-b border-slate-800">
-        <div class="container mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center max-w-7xl">
+        <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center max-w-7xl">
+            <!-- Brand & Dynamic Logo Function -->
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-extrabold text-lg shadow-md border border-blue-400/30">
-                    <i class="fas fa-envelope-open-text"></i>
+                <div class="w-11 h-11 bg-white rounded-xl p-1 flex items-center justify-center shadow-md border border-blue-400/30 shrink-0 overflow-hidden">
+                    <img id="navLogoImg" src="" alt="Logo UMMU" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <span class="text-base sm:text-lg font-extrabold tracking-wide block leading-none">E-SURAT BITD UMMU</span>
-                    <span class="text-[11px] text-blue-300 font-medium">Biro Informasi Teknologi & Data — UMMU</span>
+                    <span id="navAppTitle" class="text-sm sm:text-base font-extrabold tracking-wide block leading-tight">E-SURAT BITD UMMU</span>
+                    <span id="navAppSub" class="text-[11px] text-blue-300 font-medium block">Biro Informasi Teknologi & Data — UMMU</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-3">
-                <div id="dbStatusBadge" onclick="loadDataFromCloud(true)" class="cursor-pointer hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-slate-800 border border-slate-700 text-slate-300" title="Klik untuk sinkronisasi ulang dari Google Sheets">
+            <!-- Action Buttons & Ganti Web -->
+            <div class="flex items-center gap-2 sm:gap-2.5">
+                <!-- Indikator Database Google Sheets -->
+                <div id="dbStatusBadge" onclick="loadDataFromCloud(true)" class="cursor-pointer hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition" title="Klik untuk sinkronisasi ulang dari Google Sheets">
                     <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
                     <span id="dbStatusText">Memeriksa DB...</span>
                 </div>
 
+                <!-- FITUR GANTI WEB (SWITCH APLIKASI WEB UMMU) -->
+                <button onclick="toggleModal('webSwitcherModal')" class="px-3 py-2 rounded-xl text-xs font-extrabold bg-indigo-600 hover:bg-indigo-500 text-white shadow transition flex items-center gap-1.5 border border-indigo-400/30" title="Pindah / Ganti ke Aplikasi Web UMMU Lainnya">
+                    <i class="fas fa-th-large"></i> <span class="hidden sm:inline">Ganti Web UMMU</span>
+                </button>
+
                 <button id="btnPublicView" onclick="switchMode('public')" class="px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow transition flex items-center gap-1.5">
-                    <i class="fas fa-globe"></i> <span class="hidden sm:inline">Layanan Pengunjung</span>
+                    <i class="fas fa-globe"></i> <span class="hidden md:inline">Publik</span>
                 </button>
                 <button id="btnAdminView" onclick="handleAdminAccess()" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
-                    <i class="fas fa-user-shield"></i> <span>Panel Admin</span>
+                    <i class="fas fa-user-shield"></i> <span class="hidden md:inline">Panel Admin</span>
                 </button>
                 <button id="btnLogout" onclick="logoutAdmin()" class="hidden px-3 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow transition items-center gap-1.5" title="Keluar Admin">
                     <i class="fas fa-sign-out-alt"></i>
@@ -55,14 +63,20 @@
         <!-- SISI PENGUNJUNG / PUBLIK                   -->
         <!-- ========================================== -->
         <div id="publicSection">
+            <!-- Hero Banner -->
             <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
                 <div class="relative z-10 max-w-2xl">
-                    <span class="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-bold uppercase tracking-wider mb-3">
-                        <i class="fas fa-cloud mr-1"></i> Terintegrasi Database Google Sheets BITD
-                    </span>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Portal Pengajuan Surat Masuk & Lacak Disposisi BITD</h1>
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-bold uppercase tracking-wider">
+                            <i class="fas fa-cloud mr-1"></i> Database Google Sheets Publik
+                        </span>
+                        <button onclick="toggleModal('webSwitcherModal')" class="px-3 py-1 rounded-full bg-indigo-500/30 hover:bg-indigo-500/50 border border-indigo-400/40 text-indigo-200 text-[11px] font-bold transition">
+                            <i class="fas fa-exchange-alt mr-1"></i> Pindah Aplikasi Web Kampus
+                        </button>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Portal Pengajuan Surat Masuk & Arsip Resmi BITD (A4)</h1>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Kirimkan surat permohonan layanan IT, peminjaman infrastruktur, permintaan data PDDikti, atau undangan resmi ke Biro Informasi Teknologi & Data (BITD) UMMU dari perangkat Anda dan pantau status verifikasinya secara real-time.
+                        Kirimkan surat permohonan layanan IT, peminjaman ruangan/aset, permintaan data PDDikti, atau undangan resmi ke Biro Informasi Teknologi & Data (BITD) UMMU dan pantau status verifikasi serta cetak bukti secara langsung.
                     </p>
                 </div>
                 <i class="fas fa-paper-plane text-9xl text-white/5 absolute -right-4 -bottom-4 transform -rotate-12"></i>
@@ -104,9 +118,11 @@
                 <!-- FORM INPUT SURAT MASUK PENGUNJUNG -->
                 <div class="lg:col-span-5">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="bg-slate-900 px-6 py-4 text-white">
-                            <h2 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-file-upload text-blue-400 mr-2"></i>Form Kirim Surat Masuk</h2>
-                            <p class="text-[11px] text-slate-400 mt-0.5">Otomatis masuk ke Google Spreadsheet Admin BITD</p>
+                        <div class="bg-slate-900 px-6 py-4 text-white flex items-center justify-between">
+                            <div>
+                                <h2 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-file-upload text-blue-400 mr-2"></i>Form Kirim Surat Masuk</h2>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Otomatis tersimpan ke Google Sheets Admin BITD</p>
+                            </div>
                         </div>
                         <form id="publicSuratForm" class="p-6 space-y-4">
                             <div>
@@ -159,53 +175,75 @@
                             </div>
 
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
-                                <i class="fas fa-paper-plane"></i> Kirim Surat ke Server BITD
+                                <i class="fas fa-paper-plane"></i> Kirim Surat & Dapatkan Bukti A4
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <!-- CEK STATUS & TABEL ANTRIAN VERIFIKASI PUBLIK -->
+                <!-- CEK STATUS & TABEL ANTRIAN VERIFIKASI PUBLIK + ARSIP SURAT KELUAR PUBLIK -->
                 <div class="lg:col-span-7 space-y-6">
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="block text-xs font-extrabold text-slate-700 uppercase"><i class="fas fa-search text-blue-600 mr-1.5"></i>Lacak Status Verifikasi Surat Masuk</label>
-                            <button onclick="loadDataFromCloud(true)" class="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1">
-                                <i class="fas fa-sync-alt"></i> Muat Ulang Data Cloud
+                    <!-- Sub-Tab Publik: Lacak Surat Masuk vs Lihat Surat Keluar Resmi -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="flex border-b border-slate-200 bg-slate-50 px-4 pt-2 gap-2 justify-between items-center flex-wrap">
+                            <div class="flex gap-2">
+                                <button id="pubTabBtnMasuk" onclick="switchPublicTab('masuk')" class="px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-blue-600 text-blue-600 flex items-center gap-1.5">
+                                    <i class="fas fa-inbox"></i> Status Verifikasi Surat Masuk
+                                </button>
+                                <button id="pubTabBtnKeluar" onclick="switchPublicTab('keluar')" class="px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5">
+                                    <i class="fas fa-file-signature"></i> Surat Keluar Resmi BITD (A4)
+                                </button>
+                            </div>
+                            <button onclick="loadDataFromCloud(true)" class="text-[11px] font-bold text-blue-600 hover:underline py-2 px-2 flex items-center gap-1">
+                                <i class="fas fa-sync-alt"></i> Refresh Cloud
                             </button>
                         </div>
-                        <div class="flex flex-col sm:flex-row gap-2.5">
-                            <input type="text" id="publicSearchInput" onkeyup="renderPublicQueue()" placeholder="Ketik Kode Registrasi (REG-BITD-...), Nomor Surat, atau Unit Pengirim..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
-                            <select id="publicStatusFilter" onchange="renderPublicQueue()" class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-700">
-                                <option value="all">Semua Status</option>
-                                <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
-                                <option value="Diverifikasi / Disposisi">Diverifikasi / Disposisi</option>
-                                <option value="Selesai">Selesai</option>
-                                <option value="Ditolak">Ditolak</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                            <div>
-                                <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Antrian & Status Verifikasi Surat Masuk</h3>
-                                <p class="text-[11px] text-slate-500">Pembaruan status verifikasi langsung oleh Admin BITD UMMU</p>
+                        <!-- Konten Tab Publik 1: Lacak Surat Masuk -->
+                        <div id="pubTabContentMasuk" class="p-4 space-y-4">
+                            <div class="flex flex-col sm:flex-row gap-2.5">
+                                <input type="text" id="publicSearchInput" onkeyup="renderPublicQueue()" placeholder="Ketik Kode Registrasi (REG-BITD-...), Nomor Surat, atau Unit Pengirim..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
+                                <select id="publicStatusFilter" onchange="renderPublicQueue()" class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-700">
+                                    <option value="all">Semua Status</option>
+                                    <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+                                    <option value="Diverifikasi / Disposisi">Diverifikasi / Disposisi</option>
+                                    <option value="Selesai">Selesai</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                </select>
+                            </div>
+
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                                <table class="min-w-full divide-y divide-slate-200 text-xs">
+                                    <thead class="bg-slate-900 text-white uppercase text-[10px] tracking-wider font-extrabold">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left">Kode Reg / Tgl</th>
+                                            <th class="px-4 py-3 text-left">Pengirim & No. Surat</th>
+                                            <th class="px-4 py-3 text-left">Perihal & Disposisi</th>
+                                            <th class="px-4 py-3 text-center">Status Verifikasi</th>
+                                            <th class="px-4 py-3 text-center">Bukti (A4)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="publicQueueBody" class="divide-y divide-slate-100 bg-white"></tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-slate-200 text-xs">
-                                <thead class="bg-slate-900 text-white uppercase text-[10px] tracking-wider font-extrabold">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left">Kode Reg / Tgl</th>
-                                        <th class="px-4 py-3 text-left">Pengirim & No. Surat</th>
-                                        <th class="px-4 py-3 text-left">Perihal & Disposisi</th>
-                                        <th class="px-4 py-3 text-center">Status Verifikasi</th>
-                                        <th class="px-4 py-3 text-center">Bukti</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="publicQueueBody" class="divide-y divide-slate-100 bg-white"></tbody>
-                            </table>
+
+                        <!-- Konten Tab Publik 2: Daftar & Cetak Surat Keluar Resmi BITD (Akses Publik) -->
+                        <div id="pubTabContentKeluar" class="hidden p-4 space-y-4">
+                            <input type="text" id="publicSearchKeluar" onkeyup="renderPublicSuratKeluar()" placeholder="Cari nomor surat keluar, tujuan, jenis surat, atau perihal..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none">
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                                <table class="min-w-full divide-y divide-slate-200 text-xs">
+                                    <thead class="bg-slate-900 text-white uppercase text-[10px] tracking-wider font-extrabold">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left">Nomor & Tgl Surat</th>
+                                            <th class="px-4 py-3 text-left">Kepada YTH (Tujuan)</th>
+                                            <th class="px-4 py-3 text-left">Jenis & Perihal</th>
+                                            <th class="px-4 py-3 text-center">Cetak (A4)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="publicKeluarBody" class="divide-y divide-slate-100 bg-white"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -216,23 +254,29 @@
         <!-- SISI ADMINISTRATOR BITD                    -->
         <!-- ========================================== -->
         <div id="adminSection" class="hidden space-y-6">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-blue-600 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-blue-600 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-extrabold uppercase">Administrator Mode</span>
                         <span class="text-xs text-slate-400 font-semibold">| Biro Informasi Teknologi & Data</span>
                     </div>
-                    <h2 class="text-xl font-extrabold text-slate-800 mt-1">Dashboard Verifikasi Surat Masuk & Arsip Surat Keluar</h2>
+                    <h2 class="text-xl font-extrabold text-slate-800 mt-1">Dashboard Verifikasi Surat, Logo Kop Dinamis & Portal Web</h2>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="configureGoogleSheetsUrl()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
-                        <i class="fas fa-database"></i> Hubungkan Google Sheets API
+                    <button onclick="openLogoModal()" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fas fa-image"></i> Ganti Logo Web & Kop Surat
                     </button>
-                    <button onclick="openSuratKeluarModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
-                        <i class="fas fa-plus-circle"></i> Buat & Cetak Surat Keluar
+                    <button onclick="toggleModal('webSwitcherModal')" class="bg-purple-600 hover:bg-purple-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fas fa-sitemap"></i> Kelola Daftar Web UMMU
                     </button>
-                    <button onclick="exportAgendaExcel()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
-                        <i class="fas fa-file-excel"></i> Export Excel (.xlsx)
+                    <button onclick="configureGoogleSheetsUrl()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fas fa-database"></i> Koneksi Google Sheets
+                    </button>
+                    <button onclick="openSuratKeluarModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fas fa-plus-circle"></i> Buat Surat Keluar (A4)
+                    </button>
+                    <button onclick="exportAgendaExcel()" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fas fa-file-excel"></i> Export Excel
                     </button>
                 </div>
             </div>
@@ -244,7 +288,7 @@
                     <span id="badgePendingCount" class="px-2 py-0.5 text-[10px] rounded-full bg-amber-100 text-amber-800">0</span>
                 </button>
                 <button id="tabBtnKeluar" onclick="switchAdminTab('keluar')" class="px-5 py-3 text-xs font-extrabold uppercase tracking-wider border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2">
-                    <i class="fas fa-paper-plane"></i> Arsip & Cetak Surat Keluar
+                    <i class="fas fa-paper-plane"></i> Arsip & Cetak Surat Keluar (A4)
                     <span id="badgeKeluarCount" class="px-2 py-0.5 text-[10px] rounded-full bg-slate-100 text-slate-700">0</span>
                 </button>
             </div>
@@ -298,11 +342,11 @@
                 </div>
             </div>
 
-            <!-- TAB 2: MANAJEMEN & CETAK SURAT KELUAR BITD -->
+            <!-- TAB 2: MANAJEMEN & CETAK SURAT KELUAR BITD (UKURAN A4) -->
             <div id="adminTabKeluar" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center">
                     <input type="text" id="admSearchKeluar" onkeyup="renderAdminSuratKeluar()" placeholder="Cari nomor surat keluar, tujuan, jenis surat, atau perihal..." class="w-full sm:w-96 bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold">
-                    <span class="text-xs font-bold text-slate-500">Klik tombol <b class="text-blue-600">Cetak Surat (F4)</b> untuk membuka format surat resmi berkop UMMU</span>
+                    <span class="text-xs font-bold text-slate-500">Klik tombol <b class="text-blue-600">Cetak Surat (A4)</b> untuk membuka format surat resmi berkop UMMU</span>
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
@@ -315,7 +359,7 @@
                                     <th class="px-4 py-3.5 text-left">Kepada YTH (Tujuan)</th>
                                     <th class="px-4 py-3.5 text-left">Jenis & Perihal Surat</th>
                                     <th class="px-4 py-3.5 text-left">Penandatangan</th>
-                                    <th class="px-4 py-3.5 text-center">Aksi / Cetak Surat</th>
+                                    <th class="px-4 py-3.5 text-center">Aksi / Cetak (A4)</th>
                                 </tr>
                             </thead>
                             <tbody id="adminKeluarBody" class="divide-y divide-slate-100 bg-white"></tbody>
@@ -327,7 +371,107 @@
 
     </main>
 
-    <!-- MODAL VERIFIKASI & DISPOSISI SURAT MASUK (ADMIN) -->
+    <!-- ========================================================================= -->
+    <!-- MODAL 1: FITUR GANTI WEB (PORTAL EKOSISTEM APLIKASI WEB UMMU)             -->
+    <!-- ========================================================================= -->
+    <div id="webSwitcherModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('webSwitcherModal')"></div>
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl z-50 overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="bg-slate-900 px-6 py-4 text-white flex justify-between items-center shrink-0">
+                <div>
+                    <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-th-large text-indigo-400 mr-2"></i>Pindah / Ganti Aplikasi Web Ekosistem UMMU</h3>
+                    <p class="text-[11px] text-slate-400">Pilih layanan aplikasi web resmi Universitas Muhammadiyah Maluku Utara (Tersimpan di Google Sheets)</p>
+                </div>
+                <button onclick="toggleModal('webSwitcherModal')" class="text-slate-400 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-5 flex-grow">
+                <!-- Daftar Grid Aplikasi Web UMMU -->
+                <div id="webLinksGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5"></div>
+
+                <!-- Form Tambah Web Baru (Khusus Admin) -->
+                <div id="adminAddWebBox" class="hidden bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <h4 class="text-xs font-extrabold text-slate-800 uppercase mb-3"><i class="fas fa-plus-circle text-indigo-600 mr-1"></i>Tambah Aplikasi Web Kampus Baru (Admin)</h4>
+                    <form id="addWebForm" class="grid grid-cols-1 sm:grid-cols-4 gap-2.5 text-xs">
+                        <input type="text" id="newWebName" required placeholder="Nama Web (Mis: SIM-ASET BITD)" class="bg-white border border-slate-200 rounded-xl p-2.5 font-semibold">
+                        <input type="url" id="newWebUrl" required placeholder="https://..." class="bg-white border border-slate-200 rounded-xl p-2.5 font-semibold">
+                        <input type="text" id="newWebCat" value="Layanan Kampus" placeholder="Kategori" class="bg-white border border-slate-200 rounded-xl p-2.5 font-semibold">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl p-2.5 shadow">
+                            <i class="fas fa-save mr-1"></i> Tambah ke Cloud
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL 2: PENGATURAN LOGO WEB & LOGO KOP SURAT DINAMIS (ADMIN)             -->
+    <!-- ========================================================================= -->
+    <div id="logoModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('logoModal')"></div>
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl z-50 overflow-hidden max-h-[92vh] flex flex-col">
+            <div class="bg-slate-900 px-6 py-4 text-white flex justify-between items-center shrink-0">
+                <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-image text-amber-400 mr-2"></i>Pengaturan Logo Web & Logo Kop Surat (A4)</h3>
+                <button onclick="toggleModal('logoModal')" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="logoSettingsForm" class="p-6 space-y-4 text-xs overflow-y-auto flex-grow">
+                <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center">
+                    <div>
+                        <span class="block text-[10px] font-extrabold text-slate-500 uppercase mb-2">Pratinjau Logo Web (Navbar)</span>
+                        <img id="previewAppLogo" src="" alt="Preview Logo Web" class="w-16 h-16 object-contain mx-auto bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-extrabold text-slate-500 uppercase mb-2">Pratinjau Logo Kop Surat (A4)</span>
+                        <img id="previewKopLogo" src="" alt="Preview Logo Kop" class="w-16 h-16 object-contain mx-auto bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
+                    </div>
+                </div>
+
+                <div class="space-y-2 border-b border-slate-100 pb-4">
+                    <label class="block text-[11px] font-extrabold text-slate-700 uppercase">1. Ganti Logo Aplikasi Web (Navbar & Footer)</label>
+                    <input type="file" id="fileAppLogo" accept="image/*" onchange="handleLogoUpload(this, 'inputAppLogoUrl', 'previewAppLogo')" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-xs file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-50 file:text-amber-700">
+                    <input type="text" id="inputAppLogoUrl" oninput="document.getElementById('previewAppLogo').src = this.value || DEFAULT_LOGO_UMMU" placeholder="Atau tempel URL Gambar Logo Web..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-mono text-[11px]">
+                </div>
+
+                <div class="space-y-2 border-b border-slate-100 pb-4">
+                    <label class="block text-[11px] font-extrabold text-slate-700 uppercase">2. Ganti Logo Kop Surat Resmi (Halaman Cetak A4)</label>
+                    <input type="file" id="fileKopLogo" accept="image/*" onchange="handleLogoUpload(this, 'inputKopLogoUrl', 'previewKopLogo')" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-xs file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700">
+                    <input type="text" id="inputKopLogoUrl" oninput="document.getElementById('previewKopLogo').src = this.value || DEFAULT_LOGO_UMMU" placeholder="Atau tempel URL Gambar Logo Kop Surat..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-mono text-[11px]">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-600 uppercase mb-1">Baris 1 Kop Surat (Universitas)</label>
+                        <input type="text" id="inputKopUniv" value="UNIVERSITAS MUHAMMADIYAH MALUKU UTARA" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-extrabold text-slate-600 uppercase mb-1">Baris 2 Kop Surat (Biro / Unit)</label>
+                        <input type="text" id="inputKopBiro" value="BIRO INFORMASI TEKNOLOGI DAN DATA (BITD)" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-extrabold text-slate-600 uppercase mb-1">Alamat Kop Surat</label>
+                    <input type="text" id="inputKopAlamat" value="Jl. K. H. Ahmad Dahlan, Kota Ternate, Maluku Utara" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-semibold">
+                </div>
+
+                <div class="flex justify-between items-center pt-3 border-t">
+                    <button type="button" onclick="resetDefaultLogos()" class="px-3 py-2 rounded-xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100">
+                        <i class="fas fa-undo mr-1"></i> Reset Logo Default UMMU
+                    </button>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="toggleModal('logoModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold shadow">
+                            <i class="fas fa-cloud-upload-alt mr-1"></i> Simpan ke Google Sheets
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: VERIFIKASI & DISPOSISI SURAT MASUK (ADMIN) -->
     <div id="verifyModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('verifyModal')"></div>
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl z-50 overflow-hidden">
@@ -378,13 +522,13 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODAL INPUT ARSIP SURAT KELUAR BITD + GENERATOR ISI SURAT DINAMIS (F4)    -->
+    <!-- MODAL 4: INPUT ARSIP SURAT KELUAR BITD + GENERATOR ISI SURAT DINAMIS (A4) -->
     <!-- ========================================================================= -->
     <div id="suratKeluarModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('suratKeluarModal')"></div>
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl z-50 overflow-hidden max-h-[92vh] flex flex-col">
             <div class="bg-slate-900 px-6 py-4 text-white flex justify-between items-center shrink-0">
-                <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-paper-plane text-indigo-400 mr-2"></i>Input Arsip & Buat Format Surat Keluar BITD</h3>
+                <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-paper-plane text-indigo-400 mr-2"></i>Input Arsip & Buat Format Surat Keluar BITD (A4)</h3>
                 <button onclick="toggleModal('suratKeluarModal')" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
 
@@ -413,7 +557,7 @@
                         <input type="date" id="outTglSurat" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Jenis Surat (Otomatis Sesuaikan Format) *</label>
+                        <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Jenis Surat (Otomatis Sesuaikan Format A4) *</label>
                         <select id="outJenis" onchange="applyTemplateJenisSurat()" class="w-full bg-indigo-50/60 border border-indigo-200 rounded-xl p-2.5 font-extrabold text-indigo-900">
                             <option value="Surat Permohonan">Surat Permohonan</option>
                             <option value="Surat Pemberitahuan">Surat Pemberitahuan</option>
@@ -438,13 +582,12 @@
 
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <label class="block text-[11px] font-extrabold text-slate-600 uppercase">Isi / Redaksi Paragraf Utama Surat (Tercetak di Kertas F4) *</label>
+                        <label class="block text-[11px] font-extrabold text-slate-600 uppercase">Isi / Redaksi Paragraf Utama Surat (Tercetak di Kertas A4) *</label>
                         <button type="button" onclick="applyTemplateJenisSurat(true)" class="text-[10px] font-bold text-indigo-600 hover:underline">
                             <i class="fas fa-sync-alt mr-0.5"></i> Reset Redaksi Sesuai Jenis Surat
                         </button>
                     </div>
                     <textarea id="outIsiSurat" rows="5" required placeholder="Tuliskan isi lengkap surat yang akan dicetak..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-medium leading-relaxed text-slate-700"></textarea>
-                    <p class="text-[10px] text-slate-400 mt-1">*Kalimat pembuka "Assalamu'Alaikum Wr. Wb. Alhamdulillah, Puji syukur..." dan kalimat penutup otomatis disertakan pada format cetak resmi F4.</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
@@ -464,12 +607,12 @@
 
                 <div class="flex flex-wrap justify-between items-center gap-2 pt-3 border-t">
                     <button type="button" onclick="previewCurrentFormSurat()" class="px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-extrabold flex items-center gap-1.5">
-                        <i class="fas fa-print"></i> Pratinjau & Cetak Format Surat (F4)
+                        <i class="fas fa-print"></i> Pratinjau & Cetak Format Surat (A4)
                     </button>
                     <div class="flex gap-2">
                         <button type="button" onclick="toggleModal('suratKeluarModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold">Batal</button>
                         <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow flex items-center gap-1.5">
-                            <i class="fas fa-save"></i> Simpan & Cetak Surat Keluar
+                            <i class="fas fa-save"></i> Simpan ke Google Sheets & Cetak (A4)
                         </button>
                     </div>
                 </div>
@@ -480,21 +623,29 @@
     <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-5 border-t border-slate-800 mt-12">
         <div class="container mx-auto px-4 max-w-7xl flex flex-col sm:flex-row justify-between items-center text-xs gap-2">
-            <p>&copy; 2026 <strong>Biro Informasi Teknologi & Data (BITD)</strong> — Universitas Muhammadiyah Maluku Utara.</p>
-            <p class="text-[11px] text-slate-500">Terhubung ke Google Sheets Cloud Database & Format Cetak F4 Resmi</p>
+            <div class="flex items-center gap-2.5">
+                <img id="footerLogoImg" src="" alt="Logo UMMU" class="w-6 h-6 object-contain bg-white rounded-md p-0.5">
+                <p>&copy; 2026 <strong id="footerKopBiro">Biro Informasi Teknologi & Data (BITD)</strong> — <span id="footerKopUniv">Universitas Muhammadiyah Maluku Utara</span>.</p>
+            </div>
+            <p class="text-[11px] text-slate-500">Terhubung ke Google Sheets Publik & Standar Cetak Kertas A4</p>
         </div>
     </footer>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbzIdP-uCdfB_9YTf6-VrBnMQOrCjp4H8Jf-gsMERMBNKzRLFIG9R8KybKOTTspm3Dwk/exec'; // Tempel URL Web App Google Apps Script (/exec) Anda di sini
+        // =========================================================================
+        // TEMPEL URL WEB APP GOOGLE APPS SCRIPT (/exec) ANDA DI BAWAH INI:
+        // =========================================================================
+        const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbzIdP-uCdfB_9YTf6-VrBnMQOrCjp4H8Jf-gsMERMBNKzRLFIG9R8KybKOTTspm3Dwk/exec';
 
-        const KEY_SURAT_MASUK = 'bitd_ummu_surat_masuk_v1';
+        const KEY_SURAT_MASUK = 'bitd_ummu_surat_masuk_v2';
         const KEY_SURAT_KELUAR = 'bitd_ummu_surat_keluar_v2';
-        const KEY_GAS_URL = 'bitd_ummu_gas_url_v1';
+        const KEY_SETTINGS = 'bitd_ummu_settings_v2';
+        const KEY_WEBS = 'bitd_ummu_webs_v2';
+        const KEY_GAS_URL = 'bitd_ummu_gas_url_v2';
 
-        // Logo Resmi UMMU (SVG Embedded High-Res agar selalu tampil tajam saat cetak PDF F4 tanpa takut broken image)
-        const LOGO_UMMU_DATA_URI = "data:image/svg+xml;utf8," + encodeURIComponent(`
+        // Logo Default UMMU (SVG tajam untuk Navbar & Kop Surat A4 jika belum diganti Admin)
+        const DEFAULT_LOGO_UMMU = "data:image/svg+xml;utf8," + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
             <circle cx="100" cy="100" r="95" fill="#ffffff" stroke="#15803d" stroke-width="6"/>
             <circle cx="100" cy="100" r="83" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="4,3"/>
@@ -516,7 +667,29 @@
         let gasWebAppUrl = localStorage.getItem(KEY_GAS_URL) || DEFAULT_GAS_URL;
         let isAdminLoggedIn = sessionStorage.getItem('bitd_admin_auth') === 'true';
 
-        // Template Redaksi Otomatis Sesuai Jenis Surat yang Dipilih
+        // Pengaturan Default Logo Web & Logo Kop Surat
+        const defaultSettings = {
+            app_logo: DEFAULT_LOGO_UMMU,
+            kop_logo: DEFAULT_LOGO_UMMU,
+            kop_univ: "UNIVERSITAS MUHAMMADIYAH MALUKU UTARA",
+            kop_biro: "BIRO INFORMASI TEKNOLOGI DAN DATA (BITD)",
+            kop_alamat: "Jl. K. H. Ahmad Dahlan, Kota Ternate, Maluku Utara"
+        };
+
+        // 10+ Daftar Aplikasi Web Resmi UMMU untuk Fitur "Ganti Web"
+        const defaultWebLinks = [
+            { id: "w1", name: "Website Resmi UMMU", url: "https://www.ummu.ac.id/fr", category: "Portal Utama", icon: "fa-university" },
+            { id: "w2", name: "Biro IT & Data (BITD)", url: "https://bitd.ummu.ac.id/", category: "Teknologi & Data", icon: "fa-network-wired" },
+            { id: "w3", name: "Admisi & PMB UMMU", url: "https://admisi.ummu.ac.id/", category: "Penerimaan", icon: "fa-user-graduate" },
+            { id: "w4", name: "Portal Akademik (SIAKAD)", url: "https://portal.ummu.ac.id/", category: "Akademik", icon: "fa-laptop-code" },
+            { id: "w5", name: "Pustaka & Repositori", url: "https://www.pustaka.ummu.ac.id/", category: "Publikasi", icon: "fa-book-open" },
+            { id: "w6", name: "Portal E-Jurnal Ilmiah", url: "https://jurnal.ummu.ac.id/index.php/index/en/index", category: "Riset & Jurnal", icon: "fa-newspaper" },
+            { id: "w7", name: "Sistem Perpustakaan", url: "https://perpustakaan.ummu.ac.id/index.php", category: "Layanan", icon: "fa-book" },
+            { id: "w8", name: "P2KK UMMU", url: "https://p2kk.ummu.ac.id/", category: "Kemahasiswaan", icon: "fa-users" },
+            { id: "w9", name: "Sistem Pembayaran", url: "https://pembayaran.ummu.ac.id/", category: "Keuangan", icon: "fa-credit-card" },
+            { id: "w10", name: "Sistem Registrasi & WiFi", url: "https://registrasi.ummu.ac.id/", category: "Akun & Jaringan", icon: "fa-wifi" }
+        ];
+
         const TEMPLATE_JENIS_SURAT = {
             "Surat Permohonan": {
                 kode: "PRG-BITD",
@@ -610,34 +783,170 @@
                 penandatangan: "Kepala Biro BITD UMMU",
                 nama_pejabat: "Erwin Gunawan, S.Kom., M.MT",
                 nidn_pejabat: "NIDN. 1217028302"
-            },
-            {
-                id: "OUT-2026-002",
-                no_surat: "002/BITD-UMMU/B/XI/2026",
-                lampiran: "-",
-                tgl_surat: "2026-11-16",
-                jenis: "Surat Pemberitahuan",
-                tujuan: "Dekan Fakultas Teknik UMMU",
-                perihal: "Pemberitahuan Realisasi Upgrade Jaringan & Hotspot Gedung Fakultas Teknik",
-                isi_surat: TEMPLATE_JENIS_SURAT["Surat Pemberitahuan"].isi,
-                penandatangan: "Kepala Biro BITD UMMU",
-                nama_pejabat: "Erwin Gunawan, S.Kom., M.MT",
-                nidn_pejabat: "NIDN. 1217028302"
             }
         ];
 
         let suratMasukList = JSON.parse(localStorage.getItem(KEY_SURAT_MASUK)) || defaultSuratMasuk;
         let suratKeluarList = JSON.parse(localStorage.getItem(KEY_SURAT_KELUAR)) || defaultSuratKeluar;
+        let appSettings = JSON.parse(localStorage.getItem(KEY_SETTINGS)) || defaultSettings;
+        let webLinksList = JSON.parse(localStorage.getItem(KEY_WEBS)) || defaultWebLinks;
 
+        // =========================================================================
+        // FUNGSI LOGO DINAMIS (LOGO WEB & LOGO KOP SURAT A4)
+        // =========================================================================
+        function applyLogoAndKopSettings() {
+            const appLogo = appSettings.app_logo || DEFAULT_LOGO_UMMU;
+            const kopLogo = appSettings.kop_logo || DEFAULT_LOGO_UMMU;
+            document.getElementById('navLogoImg').src = appLogo;
+            document.getElementById('footerLogoImg').src = appLogo;
+            document.getElementById('footerKopUniv').innerText = appSettings.kop_univ || defaultSettings.kop_univ;
+            document.getElementById('footerKopBiro').innerText = appSettings.kop_biro || defaultSettings.kop_biro;
+
+            const prevApp = document.getElementById('previewAppLogo');
+            const prevKop = document.getElementById('previewKopLogo');
+            if (prevApp) prevApp.src = appLogo;
+            if (prevKop) prevKop.src = kopLogo;
+        }
+
+        function openLogoModal() {
+            document.getElementById('inputAppLogoUrl').value = (appSettings.app_logo && !appSettings.app_logo.startsWith('data:image/svg+xml')) ? appSettings.app_logo : '';
+            document.getElementById('inputKopLogoUrl').value = (appSettings.kop_logo && !appSettings.kop_logo.startsWith('data:image/svg+xml')) ? appSettings.kop_logo : '';
+            document.getElementById('previewAppLogo').src = appSettings.app_logo || DEFAULT_LOGO_UMMU;
+            document.getElementById('previewKopLogo').src = appSettings.kop_logo || DEFAULT_LOGO_UMMU;
+            document.getElementById('inputKopUniv').value = appSettings.kop_univ || defaultSettings.kop_univ;
+            document.getElementById('inputKopBiro').value = appSettings.kop_biro || defaultSettings.kop_biro;
+            document.getElementById('inputKopAlamat').value = appSettings.kop_alamat || defaultSettings.kop_alamat;
+            toggleModal('logoModal');
+        }
+
+        // Kompres Gambar Logo Otomatis agar ringan disimpan di sel Google Sheets
+        function handleLogoUpload(fileInput, targetInputId, previewImgId) {
+            const file = fileInput.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 220;
+                    let w = img.width, h = img.height;
+                    if (w > h && w > maxDim) { h = Math.round(h * (maxDim / w)); w = maxDim; }
+                    else if (h > maxDim) { w = Math.round(w * (maxDim / h)); h = maxDim; }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const dataUrl = canvas.toDataURL('image/png', 0.85);
+                    document.getElementById(targetInputId).value = dataUrl;
+                    document.getElementById(previewImgId).src = dataUrl;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetDefaultLogos() {
+            appSettings = { ...defaultSettings };
+            localStorage.setItem(KEY_SETTINGS, JSON.stringify(appSettings));
+            applyLogoAndKopSettings();
+            pushToGoogleSheets('save_settings', { data: appSettings });
+            toggleModal('logoModal');
+            Swal.fire('Direset!', 'Logo Aplikasi dan Logo Kop Surat dikembalikan ke Logo Resmi UMMU.', 'success');
+        }
+
+        document.getElementById('logoSettingsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const newAppLogo = document.getElementById('inputAppLogoUrl').value.trim() || DEFAULT_LOGO_UMMU;
+            const newKopLogo = document.getElementById('inputKopLogoUrl').value.trim() || DEFAULT_LOGO_UMMU;
+
+            appSettings = {
+                app_logo: newAppLogo,
+                kop_logo: newKopLogo,
+                kop_univ: document.getElementById('inputKopUniv').value.trim(),
+                kop_biro: document.getElementById('inputKopBiro').value.trim(),
+                kop_alamat: document.getElementById('inputKopAlamat').value.trim()
+            };
+
+            localStorage.setItem(KEY_SETTINGS, JSON.stringify(appSettings));
+            applyLogoAndKopSettings();
+            toggleModal('logoModal');
+            await pushToGoogleSheets('save_settings', { data: appSettings });
+            Swal.fire('Tersimpan di Cloud!', 'Logo Web & Logo Kop Surat (A4) berhasil diperbarui dan dapat diakses publik.', 'success');
+        });
+
+        // =========================================================================
+        // FITUR GANTI WEB (PORTAL EKOSISTEM APLIKASI WEB UMMU)
+        // =========================================================================
+        function renderWebSwitcher() {
+            const grid = document.getElementById('webLinksGrid');
+            const adminBox = document.getElementById('adminAddWebBox');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            if (isAdminLoggedIn) adminBox.classList.remove('hidden');
+            else adminBox.classList.add('hidden');
+
+            webLinksList.forEach(w => {
+                const card = document.createElement('div');
+                card.className = "group bg-slate-50 hover:bg-indigo-50/70 border border-slate-200 hover:border-indigo-300 rounded-2xl p-4 transition flex items-center justify-between shadow-sm";
+                card.innerHTML = `
+                    <a href="${w.url}" target="_blank" class="flex items-center gap-3.5 flex-grow">
+                        <div class="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-base shadow shrink-0 group-hover:scale-105 transition">
+                            <i class="fas ${w.icon || 'fa-globe'}"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase text-indigo-600 tracking-wider block">${w.category || 'Aplikasi UMMU'}</span>
+                            <h4 class="text-xs font-extrabold text-slate-800 group-hover:text-indigo-700">${w.name}</h4>
+                            <span class="text-[10px] text-slate-400 truncate block max-w-[180px]">${w.url}</span>
+                        </div>
+                    </a>
+                    ${isAdminLoggedIn ? `
+                        <button onclick="deleteWebLink('${w.id}')" class="text-rose-500 hover:bg-rose-100 p-2 rounded-lg text-xs ml-2" title="Hapus Web">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    ` : `
+                        <a href="${w.url}" target="_blank" class="text-slate-400 group-hover:text-indigo-600 p-2">
+                            <i class="fas fa-external-link-alt text-xs"></i>
+                        </a>
+                    `}
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('addWebForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const newWeb = {
+                id: 'web-' + Date.now(),
+                name: document.getElementById('newWebName').value.trim(),
+                url: document.getElementById('newWebUrl').value.trim(),
+                category: document.getElementById('newWebCat').value.trim() || 'Layanan Kampus',
+                icon: 'fa-globe'
+            };
+            webLinksList.push(newWeb);
+            localStorage.setItem(KEY_WEBS, JSON.stringify(webLinksList));
+            this.reset();
+            renderWebSwitcher();
+            await pushToGoogleSheets('save_webs', { data: webLinksList });
+            Swal.fire('Berhasil!', 'Aplikasi web baru telah ditambahkan ke daftar Ganti Web UMMU.', 'success');
+        });
+
+        async function deleteWebLink(id) {
+            webLinksList = webLinksList.filter(w => w.id !== id);
+            localStorage.setItem(KEY_WEBS, JSON.stringify(webLinksList));
+            renderWebSwitcher();
+            await pushToGoogleSheets('save_webs', { data: webLinksList });
+        }
+
+        // =========================================================================
+        // SINKRONISASI DATABASE GOOGLE SHEETS PUBLIK
+        // =========================================================================
         function formatTanggalIndo(dateStr) {
             if (!dateStr) return '16 November 2026';
             const bulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             const parts = String(dateStr).split('-');
             if (parts.length === 3) {
-                const y = parts[0];
-                const m = parseInt(parts[1], 10) - 1;
-                const d = parseInt(parts[2], 10);
-                return `${d} ${bulanIndo[m] || 'November'} ${y}`;
+                return `${parseInt(parts[2], 10)} ${bulanIndo[parseInt(parts[1], 10) - 1] || 'November'} ${parts[0]}`;
             }
             return dateStr;
         }
@@ -647,18 +956,15 @@
             const label = document.getElementById('dbStatusText');
             if (!dot || !label) return;
             label.innerText = text;
-            if (state === 'connected') {
-                dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
-            } else if (state === 'loading') {
-                dot.className = 'w-2 h-2 rounded-full bg-blue-400 animate-ping';
-            } else {
-                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
-            }
+            if (state === 'connected') dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+            else if (state === 'loading') dot.className = 'w-2 h-2 rounded-full bg-blue-400 animate-ping';
+            else dot.className = 'w-2 h-2 rounded-full bg-amber-400';
         }
 
         async function loadDataFromCloud(showToast = false) {
+            applyLogoAndKopSettings();
             if (!gasWebAppUrl) {
-                updateDbStatusIndicator('local', 'Mode Lokal (Siap Cetak F4)');
+                updateDbStatusIndicator('local', 'Mode Lokal (Siap Cetak A4)');
                 updateAllViews();
                 return;
             }
@@ -677,10 +983,20 @@
                         suratKeluarList = result.surat_keluar;
                         localStorage.setItem(KEY_SURAT_KELUAR, JSON.stringify(suratKeluarList));
                     }
-                    updateDbStatusIndicator('connected', 'Google Sheets Terhubung');
+                    if (result.settings && Object.keys(result.settings).length > 0) {
+                        appSettings = { ...defaultSettings, ...result.settings };
+                        localStorage.setItem(KEY_SETTINGS, JSON.stringify(appSettings));
+                        applyLogoAndKopSettings();
+                    }
+                    if (Array.isArray(result.web_links) && result.web_links.length > 0) {
+                        webLinksList = result.web_links;
+                        localStorage.setItem(KEY_WEBS, JSON.stringify(webLinksList));
+                    }
+
+                    updateDbStatusIndicator('connected', 'Google Sheets Publik Aktif');
                     updateAllViews();
                     if (showToast) {
-                        Swal.fire({ icon: 'success', title: 'Tersinkronisasi!', timer: 1200, showConfirmButton: false });
+                        Swal.fire({ icon: 'success', title: 'Tersinkronisasi!', text: 'Surat, Logo Kop & Daftar Web dimuat dari Google Sheets.', timer: 1300, showConfirmButton: false });
                     }
                 }
             } catch (error) {
@@ -703,7 +1019,7 @@
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: action, ...payloadObj })
                 });
-                updateDbStatusIndicator('connected', 'Google Sheets Terhubung');
+                updateDbStatusIndicator('connected', 'Google Sheets Publik Aktif');
             } catch (err) {
                 updateDbStatusIndicator('local', 'Tersimpan Lokal');
             }
@@ -714,7 +1030,7 @@
                 title: 'Hubungkan Google Sheets API',
                 html: `
                     <div class="text-left text-xs space-y-2">
-                        <p class="text-slate-600">Tempelkan <b>Web App URL</b> dari Google Apps Script (berakhiran <code>/exec</code>):</p>
+                        <p class="text-slate-600">Tempelkan <b>Web App URL</b> dari Google Apps Script (berakhiran <code>/exec</code>) agar seluruh Surat, Logo Kop, dan Daftar Web tersimpan di Google Sheets & bisa diakses publik:</p>
                         <input type="url" id="swalGasUrl" class="w-full border border-slate-300 rounded-xl p-2.5 font-mono text-xs" placeholder="https://script.google.com/macros/s/.../exec" value="${gasWebAppUrl}">
                     </div>
                 `,
@@ -734,8 +1050,10 @@
         function updateAllViews() {
             updatePublicStats();
             renderPublicQueue();
+            renderPublicSuratKeluar();
             renderAdminSuratMasuk();
             renderAdminSuratKeluar();
+            renderWebSwitcher();
         }
 
         function updatePublicStats() {
@@ -757,6 +1075,25 @@
                 return `<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1"><i class="fas fa-check-circle"></i> Selesai</span>`;
             }
             return `<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200 inline-flex items-center gap-1"><i class="fas fa-times-circle"></i> Ditolak</span>`;
+        }
+
+        function switchPublicTab(tab) {
+            const tabMasuk = document.getElementById('pubTabContentMasuk');
+            const tabKeluar = document.getElementById('pubTabContentKeluar');
+            const btnMasuk = document.getElementById('pubTabBtnMasuk');
+            const btnKeluar = document.getElementById('pubTabBtnKeluar');
+
+            if (tab === 'masuk') {
+                tabMasuk.classList.remove('hidden');
+                tabKeluar.classList.add('hidden');
+                btnMasuk.className = "px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-blue-600 text-blue-600 flex items-center gap-1.5";
+                btnKeluar.className = "px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5";
+            } else {
+                tabMasuk.classList.add('hidden');
+                tabKeluar.classList.remove('hidden');
+                btnKeluar.className = "px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-blue-600 text-blue-600 flex items-center gap-1.5";
+                btnMasuk.className = "px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5";
+            }
         }
 
         function renderPublicQueue() {
@@ -801,8 +1138,49 @@
                     </td>
                     <td class="px-4 py-3.5 text-center whitespace-nowrap">${getStatusBadge(item.status)}</td>
                     <td class="px-4 py-3.5 text-center whitespace-nowrap">
-                        <button onclick="printTandaTerimaMasuk('${item.id}')" class="bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 p-2 rounded-lg transition font-bold text-[11px]">
-                            <i class="fas fa-print"></i> Bukti
+                        <button onclick="printTandaTerimaMasukA4('${item.id}')" class="bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 p-2 rounded-lg transition font-bold text-[11px]">
+                            <i class="fas fa-print"></i> Bukti A4
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderPublicSuratKeluar() {
+            const search = (document.getElementById('publicSearchKeluar')?.value || '').toLowerCase();
+            const tbody = document.getElementById('publicKeluarBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const filtered = suratKeluarList.filter(item =>
+                String(item.no_surat).toLowerCase().includes(search) ||
+                String(item.tujuan).toLowerCase().includes(search) ||
+                String(item.jenis).toLowerCase().includes(search) ||
+                String(item.perihal).toLowerCase().includes(search)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-slate-400 font-semibold">Belum ada dokumen surat keluar publik.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="px-4 py-3.5 whitespace-nowrap">
+                        <div class="font-mono font-extrabold text-indigo-600">${item.no_surat}</div>
+                        <div class="text-[10px] text-slate-400">${formatTanggalIndo(item.tgl_surat)}</div>
+                    </td>
+                    <td class="px-4 py-3.5 font-bold text-slate-800">${item.tujuan}</td>
+                    <td class="px-4 py-3.5">
+                        <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[10px] font-bold">${item.jenis}</span>
+                        <div class="text-slate-700 font-semibold mt-0.5">${item.perihal}</div>
+                    </td>
+                    <td class="px-4 py-3.5 text-center whitespace-nowrap">
+                        <button onclick="cetakSuratKeluarById('${item.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shadow-sm transition inline-flex items-center gap-1">
+                            <i class="fas fa-print"></i> Lihat / Cetak (A4)
                         </button>
                     </td>
                 `;
@@ -844,11 +1222,11 @@
                 icon: 'success',
                 title: 'Surat Masuk Berhasil Dikirim!',
                 html: `Nomor Registrasi Antrian Anda:<br><b class="text-lg text-blue-600 font-mono">${newRegId}</b>`,
-                confirmButtonText: 'Cetak Tanda Terima',
+                confirmButtonText: 'Cetak Tanda Terima (A4)',
                 showCancelButton: true,
                 cancelButtonText: 'Tutup'
             }).then((res) => {
-                if (res.isConfirmed) printTandaTerimaMasuk(newRegId);
+                if (res.isConfirmed) printTandaTerimaMasukA4(newRegId);
             });
         });
 
@@ -988,7 +1366,7 @@
                         <button onclick="openVerifyModal('${item.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shadow-sm transition">
                             <i class="fas fa-check-double mr-1"></i> Verifikasi
                         </button>
-                        <button onclick="printTandaTerimaMasuk('${item.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-1.5 rounded-lg text-[11px] transition">
+                        <button onclick="printTandaTerimaMasukA4('${item.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-1.5 rounded-lg text-[11px] transition" title="Cetak Disposisi A4">
                             <i class="fas fa-print"></i>
                         </button>
                         <button onclick="deleteSuratMasuk('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-1.5 rounded-lg text-[11px] transition">
@@ -1028,13 +1406,13 @@
 
             toggleModal('verifyModal');
             await pushToGoogleSheets('save_masuk', { data: suratMasukList[idx] });
-            Swal.fire('Terverifikasi!', `Status verifikasi surat ${id} berhasil disimpan.`, 'success');
+            Swal.fire('Terverifikasi!', `Status verifikasi surat ${id} berhasil disimpan ke Google Sheets.`, 'success');
         });
 
         function deleteSuratMasuk(id) {
             Swal.fire({
                 title: 'Hapus Surat Masuk?',
-                text: `Data surat ${id} akan dihapus.`,
+                text: `Data surat ${id} akan dihapus dari Google Sheets.`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#e11d48',
@@ -1048,7 +1426,7 @@
         }
 
         // =========================================================================
-        // FITUR SURAT KELUAR + GENERATOR FORMAT SURAT RESMI BITD UMMU (F4)
+        // FITUR SURAT KELUAR + CETAK FORMAT RESMI UKURAN KERTAS A4 BERLOGO KOP
         // =========================================================================
         function generateNomorSuratKeluar() {
             const jenis = document.getElementById('outJenis').value;
@@ -1132,7 +1510,7 @@
                 Swal.fire('Lengkapi Data', 'Silakan isi Nomor Surat, Tujuan (Kepada YTH), dan Perihal terlebih dahulu.', 'warning');
                 return;
             }
-            openWindowCetakSuratKeluarF4(tempItem);
+            openWindowCetakSuratKeluarA4(tempItem);
         }
 
         document.getElementById('suratKeluarForm').addEventListener('submit', async function(e) {
@@ -1151,14 +1529,14 @@
 
             Swal.fire({
                 icon: 'success',
-                title: 'Surat Keluar Tersimpan!',
-                text: 'Apakah Anda ingin langsung mencetak / menyimpan PDF Surat Keluar (F4) ini?',
+                title: 'Tersimpan di Google Sheets!',
+                text: 'Apakah Anda ingin langsung mencetak / menyimpan PDF Surat Keluar ukuran A4 ini?',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Cetak Surat (F4)',
+                confirmButtonText: 'Ya, Cetak Surat (A4)',
                 cancelButtonText: 'Nanti Saja'
             }).then((res) => {
                 if (res.isConfirmed) {
-                    openWindowCetakSuratKeluarF4(itemData);
+                    openWindowCetakSuratKeluarA4(itemData);
                 }
             });
         });
@@ -1199,8 +1577,8 @@
                         <div class="text-[10px] text-slate-400">${item.penandatangan || 'Kepala Biro BITD UMMU'}</div>
                     </td>
                     <td class="px-4 py-3.5 text-center whitespace-nowrap space-x-1">
-                        <button onclick="cetakSuratKeluarById('${item.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shadow-sm transition inline-flex items-center gap-1" title="Buka & Cetak Format Surat Resmi F4">
-                            <i class="fas fa-print"></i> Cetak Surat (F4)
+                        <button onclick="cetakSuratKeluarById('${item.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shadow-sm transition inline-flex items-center gap-1" title="Buka & Cetak Format Surat Resmi A4">
+                            <i class="fas fa-print"></i> Cetak Surat (A4)
                         </button>
                         <button onclick="openSuratKeluarModal('${item.id}')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 p-1.5 rounded-lg text-xs" title="Edit Surat">
                             <i class="fas fa-edit"></i>
@@ -1217,18 +1595,23 @@
         function cetakSuratKeluarById(id) {
             const item = suratKeluarList.find(s => s.id === id);
             if (!item) return;
-            openWindowCetakSuratKeluarF4(item);
+            openWindowCetakSuratKeluarA4(item);
         }
 
         // =========================================================================
-        // CETAK SURAT KELUAR PERSIS FORMAT GAMBAR 2 (KOP UMMU + KERTAS F4 + QR TTD)
+        // CETAK SURAT KELUAR RESMI UKURAN KERTAS A4 + LOGO KOP DINAMIS DARI CLOUD
         // =========================================================================
-        function openWindowCetakSuratKeluarF4(item) {
+        function openWindowCetakSuratKeluarA4(item) {
             const tglFormatted = formatTanggalIndo(item.tgl_surat);
+            const kopLogoSrc = appSettings.kop_logo || appSettings.app_logo || DEFAULT_LOGO_UMMU;
+            const kopUniv = appSettings.kop_univ || defaultSettings.kop_univ;
+            const kopBiro = appSettings.kop_biro || defaultSettings.kop_biro;
+            const kopAlamat = appSettings.kop_alamat || defaultSettings.kop_alamat;
+
             const isiParagrafRaw = item.isi_surat || (TEMPLATE_JENIS_SURAT[item.jenis] ? TEMPLATE_JENIS_SURAT[item.jenis].isi : '');
             const paragrafHtml = isiParagrafRaw
                 .split(/\n\s*\n/)
-                .map(p => `<p style="text-align: justify; margin: 0 0 14px 0; text-indent: 0;">${p.replace(/\n/g, '<br>')}</p>`)
+                .map(p => `<p style="text-align: justify; margin: 0 0 14px 0;">${p.replace(/\n/g, '<br>')}</p>`)
                 .join('');
 
             const qrData = encodeURIComponent(`DOKUMEN RESMI BITD UMMU | No: ${item.no_surat} | Perihal: ${item.perihal} | Tgl: ${tglFormatted} | Disahkan Oleh: ${item.nama_pejabat || 'Erwin Gunawan, S.Kom., M.MT'} (${item.nidn_pejabat || 'NIDN. 1217028302'})`);
@@ -1240,11 +1623,11 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>Cetak ${item.jenis} - ${item.no_surat}</title>
+    <title>Cetak ${item.jenis} (A4) - ${item.no_surat}</title>
     <style>
-        /* Pengaturan Ukuran Kertas F4 (Folio) 210mm x 330mm */
+        /* Pengaturan Standar Ukuran Kertas A4 (210mm x 297mm) */
         @page {
-            size: 210mm 330mm;
+            size: A4 portrait;
             margin: 18mm 20mm;
         }
         body {
@@ -1282,15 +1665,15 @@
         }
         .btn-print:hover { background: #1d4ed8; }
         .page {
-            width: 170mm;
-            min-height: 290mm;
+            width: 210mm;
+            min-height: 297mm;
             margin: 20px auto;
             background: #ffffff;
             padding: 18mm 20mm;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             box-sizing: border-box;
         }
-        /* Kop Surat dengan Logo di Sebelah Kiri Persis Gambar 2 */
+        /* Kop Surat Resmi dengan Logo Dinamis di Sebelah Kiri */
         .header {
             display: flex;
             align-items: center;
@@ -1313,12 +1696,14 @@
             font-size: 13.5pt;
             font-weight: bold;
             letter-spacing: 0.3px;
+            text-transform: uppercase;
         }
         .header-text h2 {
             margin: 3px 0;
             font-size: 15.5pt;
             font-weight: bold;
             letter-spacing: 0.3px;
+            text-transform: uppercase;
         }
         .header-text p {
             margin: 2px 0;
@@ -1327,7 +1712,7 @@
         }
         .surat-header-table {
             width: 100%;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
             border-collapse: collapse;
         }
         .surat-header-table td {
@@ -1339,10 +1724,11 @@
             .no-print { display: none !important; }
             body { background: #ffffff; }
             .page {
-                margin: 0 auto;
+                width: 100%;
+                min-height: auto;
+                margin: 0;
                 padding: 0;
                 box-shadow: none;
-                min-height: auto;
             }
         }
     </style>
@@ -1350,17 +1736,17 @@
 <body>
 
     <div class="toolbar-top no-print">
-        <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF (F4)</button>
+        <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF (A4)</button>
     </div>
 
     <div class="page">
-        <!-- KOP SURAT DENGAN LOGO UMMU DI KIRI PERSIS GAMBAR -->
+        <!-- KOP SURAT DENGAN LOGO DINAMIS DI SEBELAH KIRI -->
         <div class="header">
-            <img src="${LOGO_UMMU_DATA_URI}" alt="Logo UMMU" class="header-logo">
+            <img src="${kopLogoSrc}" alt="Logo Kop UMMU" class="header-logo">
             <div class="header-text">
-                <h3>UNIVERSITAS MUHAMMADIYAH MALUKU UTARA</h3>
-                <h2>BIRO INFORMASI TEKNOLOGI DAN DATA (BITD)</h2>
-                <p>Jl. K. H. Ahmad Dahlan, Kota Ternate, Maluku Utara</p>
+                <h3>${kopUniv}</h3>
+                <h2>${kopBiro}</h2>
+                <p>${kopAlamat}</p>
             </div>
         </div>
 
@@ -1387,7 +1773,7 @@
         </table>
 
         <!-- TUJUAN SURAT (KEPADA YTH) -->
-        <div style="margin-top: 18px; margin-bottom: 22px;">
+        <div style="margin-top: 16px; margin-bottom: 20px;">
             <p style="margin: 0;">Kepada YTH :</p>
             <p style="margin: 3px 0; font-weight: bold;">${item.tujuan}</p>
             <p style="margin: 0;">Di</p>
@@ -1410,12 +1796,12 @@
         </div>
 
         <!-- SALAM PENUTUP -->
-        <p style="font-style: italic; font-weight: bold; margin-top: 18px;">
+        <p style="font-style: italic; font-weight: bold; margin-top: 16px;">
             Wabillahi taufiq wal hidayah, Wassalamu’Alaikum Wr. Wb.
         </p>
 
         <!-- TANDA TANGAN & QR CODE KEPALA BIRO BITD UMMU -->
-        <div style="margin-top: 32px; float: right; text-align: center; width: 260px; page-break-inside: avoid;">
+        <div style="margin-top: 28px; float: right; text-align: center; width: 250px; page-break-inside: avoid;">
             <div style="font-size: 11.5pt; margin-bottom: 2px;">Ternate, ${tglFormatted}</div>
             <div style="font-size: 11.5pt; font-weight: bold; margin-bottom: 8px;">${item.penandatangan || 'Kepala Biro BITD UMMU'}</div>
             
@@ -1455,28 +1841,38 @@
             });
         }
 
-        function printTandaTerimaMasuk(id) {
+        // CETAK BUKTI REGISTRASI & LEMBAR DISPOSISI SURAT MASUK (UKURAN A4 + LOGO KOP DINAMIS)
+        function printTandaTerimaMasukA4(id) {
             const item = suratMasukList.find(s => s.id === id);
             if (!item) return;
+
+            const kopLogoSrc = appSettings.kop_logo || appSettings.app_logo || DEFAULT_LOGO_UMMU;
+            const kopUniv = appSettings.kop_univ || defaultSettings.kop_univ;
+            const kopBiro = appSettings.kop_biro || defaultSettings.kop_biro;
+            const kopAlamat = appSettings.kop_alamat || defaultSettings.kop_alamat;
 
             const win = window.open('', '_blank');
             win.document.write(`
                 <html>
                 <head>
-                    <title>Bukti Registrasi & Disposisi - ${item.id}</title>
+                    <title>Bukti Registrasi & Disposisi (A4) - ${item.id}</title>
                     <style>
-                        @page { size: 210mm 330mm; margin: 20mm; }
-                        body { font-family: 'Times New Roman', Times, serif; padding: 20px; }
+                        @page { size: A4 portrait; margin: 18mm 20mm; }
+                        body { font-family: 'Times New Roman', Times, serif; padding: 10px; }
+                        @media print { .no-print { display: none; } }
                     </style>
                 </head>
-                <body onload="window.print()">
-                    <div style="border: 2px solid #000; padding: 24px; max-width: 700px; margin: 0 auto;">
+                <body>
+                    <div class="no-print" style="text-align: right; margin-bottom: 15px;">
+                        <button onclick="window.print()" style="background:#2563eb;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:bold;">Cetak / Simpan PDF (A4)</button>
+                    </div>
+                    <div style="border: 2px solid #000; padding: 24px; max-width: 170mm; margin: 0 auto;">
                         <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 12px; margin-bottom: 16px;">
-                            <img src="${LOGO_UMMU_DATA_URI}" style="width: 68px; height: 68px; margin-right: 15px;">
+                            <img src="${kopLogoSrc}" style="width: 72px; height: 72px; object-fit: contain; margin-right: 15px;">
                             <div style="text-align: center; flex: 1;">
-                                <h2 style="margin: 0; font-size: 16pt;">UNIVERSITAS MUHAMMADIYAH MALUKU UTARA</h2>
-                                <h3 style="margin: 4px 0; font-size: 14pt;">BIRO INFORMASI TEKNOLOGI DAN DATA (BITD)</h3>
-                                <p style="margin: 0; font-size: 10pt; font-style: italic;">Jl. K. H. Ahmad Dahlan, Kota Ternate, Maluku Utara</p>
+                                <h2 style="margin: 0; font-size: 14pt; text-transform: uppercase;">${kopUniv}</h2>
+                                <h3 style="margin: 4px 0; font-size: 15pt; text-transform: uppercase;">${kopBiro}</h3>
+                                <p style="margin: 0; font-size: 10pt; font-style: italic;">${kopAlamat}</p>
                             </div>
                         </div>
                         <h4 style="text-align: center; text-decoration: underline; margin-bottom: 16px;">LEMBAR DISPOSISI & BUKTI REGISTRASI SURAT MASUK</h4>
@@ -1521,6 +1917,7 @@
                 document.getElementById('btnLogout').classList.remove('hidden');
                 document.getElementById('btnLogout').classList.add('flex');
             }
+            applyLogoAndKopSettings();
             loadDataFromCloud(false);
         });
     </script>
