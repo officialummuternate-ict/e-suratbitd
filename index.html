@@ -191,7 +191,7 @@
                                     <i class="fas fa-inbox"></i> Status Verifikasi Surat Masuk
                                 </button>
                                 <button id="pubTabBtnKeluar" onclick="switchPublicTab('keluar')" class="px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5">
-                                    <i class="fas fa-file-signature"></i> Surat Keluar Resmi BITD (A4)
+                                    <i class="fas fa-file-signature"></i> Surat Keluar Resmi BITD
                                 </button>
                             </div>
                             <button onclick="loadDataFromCloud(true)" class="text-[11px] font-bold text-blue-600 hover:underline py-2 px-2 flex items-center gap-1">
@@ -993,7 +993,7 @@
                         localStorage.setItem(KEY_WEBS, JSON.stringify(webLinksList));
                     }
 
-                    updateDbStatusIndicator('connected', 'Google Sheets Publik Aktif');
+                    updateDbStatusIndicator('connected', 'Google Sheets');
                     updateAllViews();
                     if (showToast) {
                         Swal.fire({ icon: 'success', title: 'Tersinkronisasi!', text: 'Surat, Logo Kop & Daftar Web dimuat dari Google Sheets.', timer: 1300, showConfirmButton: false });
@@ -1139,7 +1139,7 @@
                     <td class="px-4 py-3.5 text-center whitespace-nowrap">${getStatusBadge(item.status)}</td>
                     <td class="px-4 py-3.5 text-center whitespace-nowrap">
                         <button onclick="printTandaTerimaMasukA4('${item.id}')" class="bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 p-2 rounded-lg transition font-bold text-[11px]">
-                            <i class="fas fa-print"></i> Bukti A4
+                            <i class="fas fa-print"></i> Lihat Disposisi
                         </button>
                     </td>
                 `;
