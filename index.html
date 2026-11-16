@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Surat BITD - Universitas Muhammadiyah Maluku Utara</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- SheetJS (Export/Import Excel) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         .glass-header { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); }
@@ -39,11 +35,17 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Indikator Status Database Cloud -->
+                <div id="dbStatusBadge" onclick="loadDataFromCloud(true)" class="cursor-pointer hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-slate-800 border border-slate-700 text-slate-300" title="Klik untuk sinkronisasi ulang dari Google Sheets">
+                    <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span id="dbStatusText">Memeriksa DB...</span>
+                </div>
+
                 <button id="btnPublicView" onclick="switchMode('public')" class="px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow transition flex items-center gap-1.5">
                     <i class="fas fa-globe"></i> <span class="hidden sm:inline">Layanan Pengunjung</span>
                 </button>
                 <button id="btnAdminView" onclick="handleAdminAccess()" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
-                    <i class="fas fa-user-shield"></i> <span id="adminBtnText">Panel Admin</span>
+                    <i class="fas fa-user-shield"></i> <span>Panel Admin</span>
                 </button>
                 <button id="btnLogout" onclick="logoutAdmin()" class="hidden px-3 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow transition items-center gap-1.5" title="Keluar Admin">
                     <i class="fas fa-sign-out-alt"></i>
@@ -59,15 +61,14 @@
         <!-- SISI PENGUNJUNG / PUBLIK                   -->
         <!-- ========================================== -->
         <div id="publicSection">
-            <!-- Hero Banner -->
             <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
                 <div class="relative z-10 max-w-2xl">
                     <span class="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-bold uppercase tracking-wider mb-3">
-                        <i class="fas fa-bolt mr-1"></i> Layanan Persuratan Digital Satu Pintu
+                        <i class="fas fa-cloud mr-1"></i> Terintegrasi Database Google Sheets BITD
                     </span>
                     <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Portal Pengajuan Surat Masuk & Lacak Disposisi BITD</h1>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Kirimkan surat permohonan layanan IT, peminjaman infrastruktur, permintaan data, atau undangan resmi ke Biro Informasi Teknologi & Data (BITD) UMMU secara daring dan pantau status verifikasinya secara real-time.
+                        Kirimkan surat permohonan layanan IT, peminjaman infrastruktur, permintaan data PDDikti, atau undangan resmi ke Biro Informasi Teknologi & Data (BITD) UMMU dari perangkat Anda dan pantau status verifikasinya secara real-time.
                     </p>
                 </div>
                 <i class="fas fa-paper-plane text-9xl text-white/5 absolute -right-4 -bottom-4 transform -rotate-12"></i>
@@ -100,35 +101,33 @@
                     <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg shrink-0"><i class="fas fa-check-double"></i></div>
                     <div>
                         <div class="text-xl font-extrabold text-slate-800" id="pubStatDone">0</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase">Selesai / Terverifikasi</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase">Selesai Ditindaklanjuti</div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <!-- KOLOM KIRI: FORM INPUT SURAT MASUK PENGUNJUNG -->
+                <!-- FORM INPUT SURAT MASUK PENGUNJUNG -->
                 <div class="lg:col-span-5">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="bg-slate-900 px-6 py-4 text-white flex items-center justify-between">
-                            <div>
-                                <h2 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-file-upload text-blue-400 mr-2"></i>Form Kirim Surat Masuk</h2>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Silakan lengkapi data surat yang ingin diajukan ke BITD</p>
-                            </div>
+                        <div class="bg-slate-900 px-6 py-4 text-white">
+                            <h2 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-file-upload text-blue-400 mr-2"></i>Form Kirim Surat Masuk</h2>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Otomatis masuk ke Google Spreadsheet Admin BITD</p>
                         </div>
                         <form id="publicSuratForm" class="p-6 space-y-4">
                             <div>
                                 <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Nomor Surat Pengirim *</label>
-                                <input type="text" id="pubNoSurat" required placeholder="Contoh: 045/FT-UMMU/XI/2026" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                                <input type="text" id="pubNoSurat" required placeholder="Contoh: 045/FT-UMMU/XI/2026" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                                 <div>
                                     <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Tanggal Surat *</label>
-                                    <input type="date" id="pubTglSurat" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                                    <input type="date" id="pubTglSurat" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Kategori Layanan *</label>
-                                    <select id="pubKategori" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                                    <select id="pubKategori" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
                                         <option value="Layanan Jaringan & Internet">Jaringan & Internet</option>
                                         <option value="Sistem Informasi & Server">Sistem Informasi & Server</option>
                                         <option value="Permintaan Data & PDDikti">Permintaan Data & PDDikti</option>
@@ -140,43 +139,47 @@
 
                             <div>
                                 <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Instansi / Unit / Fakultas Pengirim *</label>
-                                <input type="text" id="pubPengirim" required placeholder="Contoh: Fakultas Teknik / Prodi Informatika" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                                <input type="text" id="pubPengirim" required placeholder="Contoh: Fakultas Teknik / Prodi Informatika" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                                 <div>
                                     <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Nama Pengaju (PIC) *</label>
-                                    <input type="text" id="pubNamaPemohon" required placeholder="Nama lengkap pengantar" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                                    <input type="text" id="pubNamaPemohon" required placeholder="Nama lengkap pengantar" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">No. WhatsApp Aktif *</label>
-                                    <input type="tel" id="pubKontak" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                                    <input type="tel" id="pubKontak" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Perihal / Ringkasan Isi Surat *</label>
-                                <textarea id="pubPerihal" rows="3" required placeholder="Tuliskan perihal atau maksud surat secara jelas..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none"></textarea>
+                                <textarea id="pubPerihal" rows="3" required placeholder="Tuliskan perihal atau maksud surat secara jelas..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
                             </div>
 
                             <div>
-                                <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Unggah Berkas Surat (PDF/JPG/PNG - Maks 1MB) atau Link Drive</label>
-                                <input type="file" id="pubFile" accept=".pdf,image/*" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-2">
-                                <input type="url" id="pubLink" placeholder="Opsional: Tempel tautan Google Drive jika file > 1MB" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                                <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Link Berkas Surat (Google Drive / Cloud PDF) atau File</label>
+                                <input type="url" id="pubLink" placeholder="Tempel link Google Drive berkas surat (Direkomendasikan agar bisa dibuka di semua PC)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none mb-2">
+                                <input type="file" id="pubFile" accept=".pdf,image/*" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700">
                             </div>
 
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
-                                <i class="fas fa-paper-plane"></i> Kirim Surat & Dapatkan Nomor Antrian
+                                <i class="fas fa-paper-plane"></i> Kirim Surat ke Server BITD
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <!-- KOLOM KANAN: CEK STATUS & TABEL ANTRIAN VERIFIKASI PUBLIK -->
+                <!-- CEK STATUS & TABEL ANTRIAN VERIFIKASI PUBLIK -->
                 <div class="lg:col-span-7 space-y-6">
-                    <!-- Box Lacak Cepat -->
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                        <label class="block text-xs font-extrabold text-slate-700 uppercase mb-2"><i class="fas fa-search text-blue-600 mr-1.5"></i>Lacak Status Verifikasi Surat Masuk</label>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-extrabold text-slate-700 uppercase"><i class="fas fa-search text-blue-600 mr-1.5"></i>Lacak Status Verifikasi Surat Masuk</label>
+                            <button onclick="loadDataFromCloud(true)" class="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1">
+                                <i class="fas fa-sync-alt"></i> Muat Ulang Data Cloud
+                            </button>
+                        </div>
                         <div class="flex flex-col sm:flex-row gap-2.5">
                             <input type="text" id="publicSearchInput" onkeyup="renderPublicQueue()" placeholder="Ketik Kode Registrasi (REG-BITD-...), Nomor Surat, atau Unit Pengirim..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
                             <select id="publicStatusFilter" onchange="renderPublicQueue()" class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-700">
@@ -189,7 +192,6 @@
                         </div>
                     </div>
 
-                    <!-- Daftar Antrian Surat Masuk Publik -->
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                         <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                             <div>
@@ -203,14 +205,12 @@
                                     <tr>
                                         <th class="px-4 py-3 text-left">Kode Reg / Tgl</th>
                                         <th class="px-4 py-3 text-left">Pengirim & No. Surat</th>
-                                        <th class="px-4 py-3 text-left">Perihal & Kategori</th>
+                                        <th class="px-4 py-3 text-left">Perihal & Disposisi</th>
                                         <th class="px-4 py-3 text-center">Status Verifikasi</th>
                                         <th class="px-4 py-3 text-center">Bukti</th>
                                     </tr>
                                 </thead>
-                                <tbody id="publicQueueBody" class="divide-y divide-slate-100 bg-white">
-                                    <!-- Diisi oleh JavaScript -->
-                                </tbody>
+                                <tbody id="publicQueueBody" class="divide-y divide-slate-100 bg-white"></tbody>
                             </table>
                         </div>
                     </div>
@@ -222,7 +222,6 @@
         <!-- SISI ADMINISTRATOR BITD                    -->
         <!-- ========================================== -->
         <div id="adminSection" class="hidden space-y-6">
-            <!-- Header Panel Admin -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-blue-600 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <div class="flex items-center gap-2">
@@ -232,14 +231,14 @@
                     <h2 class="text-xl font-extrabold text-slate-800 mt-1">Dashboard Verifikasi Surat Masuk & Arsip Surat Keluar</h2>
                 </div>
                 <div class="flex flex-wrap gap-2">
+                    <button onclick="configureGoogleSheetsUrl()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fas fa-database"></i> Hubungkan Google Sheets API
+                    </button>
                     <button onclick="openSuratKeluarModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
                         <i class="fas fa-plus-circle"></i> Buat Surat Keluar
                     </button>
-                    <button onclick="exportAgendaExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
-                        <i class="fas fa-file-excel"></i> Export Buku Agenda (.xlsx)
-                    </button>
-                    <button onclick="resetDemoData()" class="bg-slate-200 hover:bg-rose-100 hover:text-rose-700 text-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5" title="Reset ke Data Awal">
-                        <i class="fas fa-sync-alt"></i> Reset Demo
+                    <button onclick="exportAgendaExcel()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fas fa-file-excel"></i> Export Excel (.xlsx)
                     </button>
                 </div>
             </div>
@@ -258,7 +257,6 @@
 
             <!-- TAB 1: MANAJEMEN & VERIFIKASI SURAT MASUK -->
             <div id="adminTabMasuk" class="space-y-4">
-                <!-- Filter Admin Surat Masuk -->
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-4 gap-3">
                     <div>
                         <label class="block text-[10px] font-extrabold text-slate-500 uppercase mb-1">Filter Status Verifikasi</label>
@@ -287,7 +285,6 @@
                     </div>
                 </div>
 
-                <!-- Tabel Admin Surat Masuk -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-slate-200 text-xs">
@@ -301,9 +298,7 @@
                                     <th class="px-4 py-3.5 text-center">Aksi Admin</th>
                                 </tr>
                             </thead>
-                            <tbody id="adminMasukBody" class="divide-y divide-slate-100 bg-white">
-                                <!-- Diisi via JS -->
-                            </tbody>
+                            <tbody id="adminMasukBody" class="divide-y divide-slate-100 bg-white"></tbody>
                         </table>
                     </div>
                 </div>
@@ -311,13 +306,11 @@
 
             <!-- TAB 2: MANAJEMEN SURAT KELUAR BITD -->
             <div id="adminTabKeluar" class="hidden space-y-4">
-                <!-- Filter Surat Keluar -->
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center">
                     <input type="text" id="admSearchKeluar" onkeyup="renderAdminSuratKeluar()" placeholder="Cari nomor surat keluar, tujuan, atau perihal..." class="w-full sm:w-96 bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold">
                     <span class="text-xs font-bold text-slate-500">Arsip Resmi Surat Keluar Biro IT & Data UMMU</span>
                 </div>
 
-                <!-- Tabel Admin Surat Keluar -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-slate-200 text-xs">
@@ -331,9 +324,7 @@
                                     <th class="px-4 py-3.5 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="adminKeluarBody" class="divide-y divide-slate-100 bg-white">
-                                <!-- Diisi via JS -->
-                            </tbody>
+                            <tbody id="adminKeluarBody" class="divide-y divide-slate-100 bg-white"></tbody>
                         </table>
                     </div>
                 </div>
@@ -381,18 +372,18 @@
 
                 <div>
                     <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Catatan Verifikasi / Instruksi Disposisi *</label>
-                    <textarea id="verCatatan" rows="3" required placeholder="Tuliskan instruksi tindak lanjut atau alasan penolakan (akan tampil di pelacakan pengunjung)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-semibold"></textarea>
+                    <textarea id="verCatatan" rows="3" required placeholder="Tuliskan instruksi tindak lanjut atau alasan penolakan..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-semibold"></textarea>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-3 border-t">
                     <button type="button" onclick="toggleModal('verifyModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow">Simpan Verifikasi</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow">Simpan ke Google Sheets</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL TAMBAH / EDIT SURAT KELUAR (ADMIN) -->
+    <!-- MODAL TAMBAH SURAT KELUAR (ADMIN) -->
     <div id="suratKeluarModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('suratKeluarModal')"></div>
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl z-50 overflow-hidden">
@@ -451,24 +442,31 @@
         </div>
     </div>
 
-    <!-- AREA CETAK (HIDDEN DI LAYAR, TAMPIL SAAT PRINT) -->
+    <!-- AREA CETAK -->
     <div id="printArea" class="hidden p-8 bg-white text-black"></div>
 
     <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-5 border-t border-slate-800 mt-12">
         <div class="container mx-auto px-4 max-w-7xl flex flex-col sm:flex-row justify-between items-center text-xs gap-2">
             <p>&copy; 2026 <strong>Biro Informasi Teknologi & Data (BITD)</strong> — Universitas Muhammadiyah Maluku Utara.</p>
-            <p class="text-[11px] text-slate-500">Berjalan di GitHub Pages (Client-Side Storage Ready)</p>
+            <p class="text-[11px] text-slate-500">Terhubung ke Google Sheets Cloud Database</p>
         </div>
     </footer>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // =========================================================================
+        // TEMPEL URL GOOGLE APPS SCRIPT ANDA DI SINI AGAR OTOMATIS AKTIF DI SEMUA HP
+        // =========================================================================
+        const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbzIdP-uCdfB_9YTf6-VrBnMQOrCjp4H8Jf-gsMERMBNKzRLFIG9R8KybKOTTspm3Dwk/exec'; 
+
         const KEY_SURAT_MASUK = 'bitd_ummu_surat_masuk_v1';
         const KEY_SURAT_KELUAR = 'bitd_ummu_surat_keluar_v1';
+        const KEY_GAS_URL = 'bitd_ummu_gas_url_v1';
+
+        let gasWebAppUrl = localStorage.getItem(KEY_GAS_URL) || DEFAULT_GAS_URL;
         let isAdminLoggedIn = sessionStorage.getItem('bitd_admin_auth') === 'true';
 
-        // Data Awal (Seed Data) jika LocalStorage masih kosong
         const defaultSuratMasuk = [
             {
                 id: "REG-BITD-2026-1001",
@@ -481,7 +479,6 @@
                 kontak: "085240648372",
                 perihal: "Permohonan Penambahan Bandwidth & Akses WiFi Ruang Seminar Fakultas Teknik",
                 file_name: "Surat_Permohonan_WiFi_FT.pdf",
-                file_data: "",
                 link_drive: "",
                 status: "Selesai",
                 disposisi: "Divisi Infrastruktur & Jaringan",
@@ -498,28 +495,10 @@
                 kontak: "081230876769",
                 perihal: "Sinkronisasi Data Lulusan & Alumni Periode Wisuda Semester Ganjil 2026",
                 file_name: "Pengantar_Sinkron_PDDikti.pdf",
-                file_data: "",
                 link_drive: "",
                 status: "Diverifikasi / Disposisi",
                 disposisi: "Divisi Layanan PDDikti & Akademik",
                 catatan_admin: "Surat diterima. Sedang dilakukan penarikan data dari feeder PDDikti oleh tim database."
-            },
-            {
-                id: "REG-BITD-2026-1003",
-                no_surat: "004/BEM-UMMU/XI/2026",
-                tgl_surat: "2026-11-16",
-                tgl_terima: "2026-11-16",
-                kategori: "Peminjaman Aset / Ruangan IT",
-                pengirim: "BEM Universitas Muhammadiyah Maluku Utara",
-                pemohon: "Ewis Jola",
-                kontak: "082284238540",
-                perihal: "Peminjaman Laboratorium Komputer Terpadu BITD untuk Pelatihan Desain Grafis",
-                file_name: "Surat_Peminjaman_Lab_BEM.pdf",
-                file_data: "",
-                link_drive: "",
-                status: "Menunggu Verifikasi",
-                disposisi: "Belum Didisposisi",
-                catatan_admin: "Menunggu pemeriksaan jadwal penggunaan laboratorium oleh Admin BITD."
             }
         ];
 
@@ -532,25 +511,111 @@
                 tujuan: "Kaprodi Informatika Fakultas Teknik UMMU",
                 perihal: "Realisasi Upgrade Jaringan & Akses Hotspot Gedung Fakultas Teknik",
                 penandatangan: "Kepala Biro IT & Data (BITD) UMMU"
-            },
-            {
-                id: "OUT-2026-002",
-                no_surat: "002/BITD-UMMU/ST/XI/2026",
-                tgl_surat: "2026-11-16",
-                jenis: "Surat Tugas / SK",
-                tujuan: "Tim Teknisi Jaringan & Server BITD",
-                perihal: "Pemeliharaan Rutin Server Proxmox & Backup Database SIAKAD UMMU",
-                penandatangan: "Kepala Biro IT & Data (BITD) UMMU"
             }
         ];
 
         let suratMasukList = JSON.parse(localStorage.getItem(KEY_SURAT_MASUK)) || defaultSuratMasuk;
         let suratKeluarList = JSON.parse(localStorage.getItem(KEY_SURAT_KELUAR)) || defaultSuratKeluar;
 
-        function saveAllData() {
+        function updateDbStatusIndicator(state, text) {
+            const dot = document.getElementById('dbStatusDot');
+            const label = document.getElementById('dbStatusText');
+            if (!dot || !label) return;
+            label.innerText = text;
+            if (state === 'connected') {
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+            } else if (state === 'loading') {
+                dot.className = 'w-2 h-2 rounded-full bg-blue-400 animate-ping';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+            }
+        }
+
+        // Ambil Data dari Google Sheets Cloud
+        async function loadDataFromCloud(showToast = false) {
+            if (!gasWebAppUrl) {
+                updateDbStatusIndicator('local', 'Mode Lokal (Belum Terhubung Cloud)');
+                updateAllViews();
+                return;
+            }
+
+            try {
+                updateDbStatusIndicator('loading', 'Sinkronisasi Google Sheets...');
+                const response = await fetch(gasWebAppUrl);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    if (Array.isArray(result.surat_masuk) && result.surat_masuk.length > 0) {
+                        suratMasukList = result.surat_masuk;
+                        localStorage.setItem(KEY_SURAT_MASUK, JSON.stringify(suratMasukList));
+                    } else if (suratMasukList.length > 0) {
+                        // Jika Sheet masih kosong, kirim data awal ke Sheet
+                        await pushToGoogleSheets('save_masuk', { data: suratMasukList });
+                    }
+
+                    if (Array.isArray(result.surat_keluar) && result.surat_keluar.length > 0) {
+                        suratKeluarList = result.surat_keluar;
+                        localStorage.setItem(KEY_SURAT_KELUAR, JSON.stringify(suratKeluarList));
+                    } else if (suratKeluarList.length > 0) {
+                        await pushToGoogleSheets('save_keluar', { data: suratKeluarList });
+                    }
+
+                    updateDbStatusIndicator('connected', 'Google Sheets Terhubung');
+                    updateAllViews();
+                    if (showToast) {
+                        Swal.fire({ icon: 'success', title: 'Tersinkronisasi!', text: 'Data terbaru berhasil dimuat dari Google Spreadsheet.', timer: 1300, showConfirmButton: false });
+                    }
+                }
+            } catch (error) {
+                updateDbStatusIndicator('local', 'Offline / Cache Lokal');
+                updateAllViews();
+            }
+        }
+
+        // Kirim Perubahan ke Google Sheets Cloud
+        async function pushToGoogleSheets(action, payloadObj) {
             localStorage.setItem(KEY_SURAT_MASUK, JSON.stringify(suratMasukList));
             localStorage.setItem(KEY_SURAT_KELUAR, JSON.stringify(suratKeluarList));
             updateAllViews();
+
+            if (!gasWebAppUrl) return;
+
+            try {
+                updateDbStatusIndicator('loading', 'Menyimpan ke Google Sheets...');
+                await fetch(gasWebAppUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: action, ...payloadObj })
+                });
+                updateDbStatusIndicator('connected', 'Google Sheets Terhubung');
+            } catch (err) {
+                updateDbStatusIndicator('local', 'Tersimpan Lokal (Gagal Kirim Cloud)');
+            }
+        }
+
+        // Modal Pengaturan URL Google Apps Script di Panel Admin
+        function configureGoogleSheetsUrl() {
+            Swal.fire({
+                title: 'Hubungkan Google Sheets API',
+                html: `
+                    <div class="text-left text-xs space-y-2">
+                        <p class="text-slate-600">Tempelkan <b>Web App URL</b> dari Google Apps Script (berakhiran <code>/exec</code>) agar seluruh surat masuk & surat keluar tersimpan terpusat:</p>
+                        <input type="url" id="swalGasUrl" class="w-full border border-slate-300 rounded-xl p-2.5 font-mono text-xs" placeholder="https://script.google.com/macros/s/.../exec" value="${gasWebAppUrl}">
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Simpan & Sinkronkan',
+                cancelButtonText: 'Batal',
+                preConfirm: () => {
+                    return document.getElementById('swalGasUrl').value.trim();
+                }
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    gasWebAppUrl = res.value;
+                    localStorage.setItem(KEY_GAS_URL, gasWebAppUrl);
+                    loadDataFromCloud(true);
+                }
+            });
         }
 
         function updateAllViews() {
@@ -560,7 +625,6 @@
             renderAdminSuratKeluar();
         }
 
-        // Statistik Publik & Badge Admin
         function updatePublicStats() {
             const total = suratMasukList.length;
             const pending = suratMasukList.filter(s => s.status === 'Menunggu Verifikasi').length;
@@ -576,7 +640,6 @@
             document.getElementById('badgeKeluarCount').innerText = suratKeluarList.length;
         }
 
-        // Badge Warna Status
         function getStatusBadge(status) {
             if (status === 'Menunggu Verifikasi') {
                 return `<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200 inline-flex items-center gap-1"><i class="fas fa-hourglass-half"></i> Menunggu Verifikasi</span>`;
@@ -589,7 +652,6 @@
             }
         }
 
-        // Render Tabel Antrian Publik
         function renderPublicQueue() {
             const query = document.getElementById('publicSearchInput').value.toLowerCase();
             const statusFilter = document.getElementById('publicStatusFilter').value;
@@ -598,10 +660,10 @@
 
             const filtered = suratMasukList.filter(item => {
                 const matchStatus = statusFilter === 'all' || item.status === statusFilter;
-                const matchQuery = item.id.toLowerCase().includes(query) ||
-                                   item.no_surat.toLowerCase().includes(query) ||
-                                   item.pengirim.toLowerCase().includes(query) ||
-                                   item.perihal.toLowerCase().includes(query);
+                const matchQuery = String(item.id).toLowerCase().includes(query) ||
+                                   String(item.no_surat).toLowerCase().includes(query) ||
+                                   String(item.pengirim).toLowerCase().includes(query) ||
+                                   String(item.perihal).toLowerCase().includes(query);
                 return matchStatus && matchQuery;
             });
 
@@ -643,71 +705,51 @@
             });
         }
 
-        // Submit Surat Masuk oleh Pengunjung
-        document.getElementById('publicSuratForm').addEventListener('submit', function(e) {
+        // Submit Surat Masuk oleh Pengunjung -> Langsung Simpan ke Google Sheets
+        document.getElementById('publicSuratForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const fileInput = document.getElementById('pubFile');
             const file = fileInput.files[0];
 
-            if (file && file.size > 1024 * 1024) {
-                Swal.fire('Ukuran File Terlalu Besar', 'Untuk mode GitHub Pages, ukuran lampiran langsung maksimal 1 MB. Gunakan kolom tautan Google Drive untuk file berukuran besar.', 'warning');
-                return;
-            }
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const newRegId = `REG-BITD-2026-${randomNum}`;
+            const today = new Date().toISOString().split('T')[0];
 
-            const processSubmission = (fileDataUrl, fileName) => {
-                const randomNum = Math.floor(1000 + Math.random() * 9000);
-                const newRegId = `REG-BITD-2026-${randomNum}`;
-                const today = new Date().toISOString().split('T')[0];
-
-                const newSurat = {
-                    id: newRegId,
-                    no_surat: document.getElementById('pubNoSurat').value.trim(),
-                    tgl_surat: document.getElementById('pubTglSurat').value,
-                    tgl_terima: today,
-                    kategori: document.getElementById('pubKategori').value,
-                    pengirim: document.getElementById('pubPengirim').value.trim(),
-                    pemohon: document.getElementById('pubNamaPemohon').value.trim(),
-                    kontak: document.getElementById('pubKontak').value.trim(),
-                    perihal: document.getElementById('pubPerihal').value.trim(),
-                    file_name: fileName || 'Tanpa Lampiran Lokal',
-                    file_data: fileDataUrl || '',
-                    link_drive: document.getElementById('pubLink').value.trim(),
-                    status: 'Menunggu Verifikasi',
-                    disposisi: 'Belum Didisposisi',
-                    catatan_admin: 'Surat baru diinput oleh pengunjung. Menunggu verifikasi Admin BITD.'
-                };
-
-                suratMasukList.unshift(newSurat);
-                saveAllData();
-                document.getElementById('publicSuratForm').reset();
-                document.getElementById('pubTglSurat').value = today;
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Surat Masuk Berhasil Dikirim!',
-                    html: `Nomor Registrasi Antrian Anda:<br><b class="text-lg text-blue-600 font-mono">${newRegId}</b><br><span class="text-xs text-slate-500">Silakan simpan kode ini untuk melacak verifikasi Admin BITD.</span>`,
-                    confirmButtonText: 'Cetak Tanda Terima',
-                    showCancelButton: true,
-                    cancelButtonText: 'Tutup'
-                }).then((res) => {
-                    if (res.isConfirmed) {
-                        printTandaTerima(newRegId);
-                    }
-                });
+            const newSurat = {
+                id: newRegId,
+                no_surat: document.getElementById('pubNoSurat').value.trim(),
+                tgl_surat: document.getElementById('pubTglSurat').value,
+                tgl_terima: today,
+                kategori: document.getElementById('pubKategori').value,
+                pengirim: document.getElementById('pubPengirim').value.trim(),
+                pemohon: document.getElementById('pubNamaPemohon').value.trim(),
+                kontak: document.getElementById('pubKontak').value.trim(),
+                perihal: document.getElementById('pubPerihal').value.trim(),
+                file_name: file ? file.name : 'Tanpa File Lokal',
+                link_drive: document.getElementById('pubLink').value.trim(),
+                status: 'Menunggu Verifikasi',
+                disposisi: 'Belum Didisposisi',
+                catatan_admin: 'Surat baru diinput oleh pengunjung. Menunggu verifikasi Admin BITD.'
             };
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    processSubmission(evt.target.result, file.name);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                processSubmission('', '');
-            }
+            suratMasukList.unshift(newSurat);
+            document.getElementById('publicSuratForm').reset();
+            document.getElementById('pubTglSurat').value = today;
+
+            await pushToGoogleSheets('save_masuk', { data: newSurat });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Surat Masuk Berhasil Dikirim!',
+                html: `Nomor Registrasi Antrian Anda:<br><b class="text-lg text-blue-600 font-mono">${newRegId}</b><br><span class="text-xs text-slate-500">Data telah masuk ke database Google Sheets Admin BITD.</span>`,
+                confirmButtonText: 'Cetak Tanda Terima',
+                showCancelButton: true,
+                cancelButtonText: 'Tutup'
+            }).then((res) => {
+                if (res.isConfirmed) printTandaTerima(newRegId);
+            });
         });
 
-        // Autentikasi & Mode Switch Admin
         function handleAdminAccess() {
             if (isAdminLoggedIn) {
                 switchMode('admin');
@@ -720,7 +762,7 @@
                     <div class="text-left space-y-3 mt-2">
                         <div>
                             <label class="text-xs font-bold text-slate-600 uppercase">Username</label>
-                            <input type="text" id="swalUser" class="w-full border rounded-xl p-2.5 text-sm mt-1" placeholder="admin" value="admin">
+                            <input type="text" id="swalUser" class="w-full border rounded-xl p-2.5 text-sm mt-1" value="admin">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-slate-600 uppercase">Password</label>
@@ -735,12 +777,9 @@
                 preConfirm: () => {
                     const u = document.getElementById('swalUser').value.trim();
                     const p = document.getElementById('swalPass').value.trim();
-                    if (u === 'admin' && p === 'bitd123') {
-                        return true;
-                    } else {
-                        Swal.showValidationMessage('Username atau Password salah! (Gunakan: admin / bitd123)');
-                        return false;
-                    }
+                    if (u === 'admin' && p === 'bitd123') return true;
+                    Swal.showValidationMessage('Username atau Password salah! (Gunakan: admin / bitd123)');
+                    return false;
                 }
             }).then((res) => {
                 if (res.isConfirmed) {
@@ -749,7 +788,6 @@
                     document.getElementById('btnLogout').classList.remove('hidden');
                     document.getElementById('btnLogout').classList.add('flex');
                     switchMode('admin');
-                    Swal.fire({ icon: 'success', title: 'Selamat Datang Admin BITD', timer: 1200, showConfirmButton: false });
                 }
             });
         }
@@ -759,28 +797,19 @@
             sessionStorage.removeItem('bitd_admin_auth');
             document.getElementById('btnLogout').classList.add('hidden');
             switchMode('public');
-            Swal.fire({ icon: 'info', title: 'Anda telah keluar dari Panel Admin', timer: 1200, showConfirmButton: false });
         }
 
         function switchMode(mode) {
             const pubSec = document.getElementById('publicSection');
             const admSec = document.getElementById('adminSection');
-            const btnPub = document.getElementById('btnPublicView');
-            const btnAdm = document.getElementById('btnAdminView');
-
             if (mode === 'admin') {
                 pubSec.classList.add('hidden');
                 admSec.classList.remove('hidden');
-                btnAdm.className = "px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow transition flex items-center gap-1.5";
-                btnPub.className = "px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5";
-                updateAllViews();
             } else {
                 admSec.classList.add('hidden');
                 pubSec.classList.remove('hidden');
-                btnPub.className = "px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow transition flex items-center gap-1.5";
-                btnAdm.className = "px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5";
-                updateAllViews();
             }
+            updateAllViews();
         }
 
         function switchAdminTab(tab) {
@@ -802,7 +831,6 @@
             }
         }
 
-        // Render Tabel Surat Masuk (Admin)
         function renderAdminSuratMasuk() {
             const statusFilter = document.getElementById('admFilterStatusMasuk').value;
             const katFilter = document.getElementById('admFilterKategoriMasuk').value;
@@ -813,10 +841,10 @@
             const filtered = suratMasukList.filter(item => {
                 const mStatus = statusFilter === 'all' || item.status === statusFilter;
                 const mKat = katFilter === 'all' || item.kategori === katFilter;
-                const mSearch = item.id.toLowerCase().includes(search) ||
-                                item.no_surat.toLowerCase().includes(search) ||
-                                item.pengirim.toLowerCase().includes(search) ||
-                                item.perihal.toLowerCase().includes(search);
+                const mSearch = String(item.id).toLowerCase().includes(search) ||
+                                String(item.no_surat).toLowerCase().includes(search) ||
+                                String(item.pengirim).toLowerCase().includes(search) ||
+                                String(item.perihal).toLowerCase().includes(search);
                 return mStatus && mKat && mSearch;
             });
 
@@ -826,11 +854,9 @@
             }
 
             filtered.forEach(item => {
-                let lampiranBtn = `<span class="text-[10px] text-slate-400 italic">${item.file_name}</span>`;
-                if (item.file_data) {
-                    lampiranBtn = `<a href="${item.file_data}" download="${item.file_name}" class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:underline"><i class="fas fa-paperclip"></i> Unduh Berkas</a>`;
-                } else if (item.link_drive) {
-                    lampiranBtn = `<a href="${item.link_drive}" target="_blank" class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:underline"><i class="fab fa-google-drive"></i> Buka Link Drive</a>`;
+                let lampiranBtn = `<span class="text-[10px] text-slate-400 italic">${item.file_name || '-'}</span>`;
+                if (item.link_drive) {
+                    lampiranBtn = `<a href="${item.link_drive}" target="_blank" class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:underline"><i class="fab fa-google-drive"></i> Buka Berkas Drive</a>`;
                 }
 
                 const tr = document.createElement('tr');
@@ -846,7 +872,7 @@
                     </td>
                     <td class="px-4 py-3.5 whitespace-nowrap">
                         <div class="font-bold text-slate-800">${item.pemohon}</div>
-                        <a href="https://wa.me/${item.kontak.replace(/^0/, '62')}" target="_blank" class="text-[10px] text-emerald-600 font-bold hover:underline"><i class="fab fa-whatsapp"></i> ${item.kontak}</a>
+                        <a href="https://wa.me/${String(item.kontak).replace(/^0/, '62')}" target="_blank" class="text-[10px] text-emerald-600 font-bold hover:underline"><i class="fab fa-whatsapp"></i> ${item.kontak}</a>
                     </td>
                     <td class="px-4 py-3.5">
                         <span class="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold mb-1">${item.kategori}</span>
@@ -859,13 +885,13 @@
                         <div class="text-[10px] text-slate-500 italic truncate max-w-xs" title="${item.catatan_admin}">${item.catatan_admin}</div>
                     </td>
                     <td class="px-4 py-3.5 text-center whitespace-nowrap space-x-1">
-                        <button onclick="openVerifyModal('${item.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shadow-sm transition" title="Verifikasi & Disposisi">
+                        <button onclick="openVerifyModal('${item.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shadow-sm transition">
                             <i class="fas fa-check-double mr-1"></i> Verifikasi
                         </button>
-                        <button onclick="printTandaTerima('${item.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-1.5 rounded-lg text-[11px] transition" title="Cetak Lembar Disposisi">
+                        <button onclick="printTandaTerima('${item.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-1.5 rounded-lg text-[11px] transition">
                             <i class="fas fa-print"></i>
                         </button>
-                        <button onclick="deleteSuratMasuk('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-1.5 rounded-lg text-[11px] transition" title="Hapus Surat">
+                        <button onclick="deleteSuratMasuk('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-1.5 rounded-lg text-[11px] transition">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -874,7 +900,6 @@
             });
         }
 
-        // Buka Modal Verifikasi Admin
         function openVerifyModal(id) {
             const item = suratMasukList.find(s => s.id === id);
             if (!item) return;
@@ -891,8 +916,7 @@
             toggleModal('verifyModal');
         }
 
-        // Simpan Verifikasi Admin
-        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+        document.getElementById('verifyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const id = document.getElementById('verId').value;
             const idx = suratMasukList.findIndex(s => s.id === id);
@@ -902,29 +926,28 @@
             suratMasukList[idx].disposisi = document.getElementById('verDisposisi').value;
             suratMasukList[idx].catatan_admin = document.getElementById('verCatatan').value.trim();
 
-            saveAllData();
             toggleModal('verifyModal');
-            Swal.fire('Terverifikasi!', `Status surat ${id} berhasil diperbarui.`, 'success');
+            await pushToGoogleSheets('save_masuk', { data: suratMasukList[idx] });
+            Swal.fire('Terverifikasi!', `Status verifikasi surat ${id} berhasil disimpan ke Google Sheets.`, 'success');
         });
 
         function deleteSuratMasuk(id) {
             Swal.fire({
                 title: 'Hapus Surat Masuk?',
-                text: `Data surat ${id} akan dihapus dari daftar.`,
+                text: `Data surat ${id} akan dihapus dari web dan Google Sheets.`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#e11d48',
                 confirmButtonText: 'Ya, Hapus'
-            }).then((res) => {
+            }).then(async (res) => {
                 if (res.isConfirmed) {
                     suratMasukList = suratMasukList.filter(s => s.id !== id);
-                    saveAllData();
-                    Swal.fire('Terhapus', 'Data surat masuk telah dihapus.', 'success');
+                    await pushToGoogleSheets('delete_masuk', { id: id });
+                    Swal.fire('Terhapus', 'Data surat masuk telah dihapus dari Google Sheets.', 'success');
                 }
             });
         }
 
-        // Manajemen Surat Keluar (Admin)
         function generateNomorSuratKeluar() {
             const nextNum = String(suratKeluarList.length + 1).padStart(3, '0');
             const romawiBulan = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][new Date().getMonth()];
@@ -939,7 +962,7 @@
             toggleModal('suratKeluarModal');
         }
 
-        document.getElementById('suratKeluarForm').addEventListener('submit', function(e) {
+        document.getElementById('suratKeluarForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const newOut = {
                 id: `OUT-2026-${Math.floor(100 + Math.random() * 900)}`,
@@ -952,9 +975,9 @@
             };
 
             suratKeluarList.unshift(newOut);
-            saveAllData();
             toggleModal('suratKeluarModal');
-            Swal.fire('Tersimpan!', 'Arsip surat keluar baru berhasil dicatat.', 'success');
+            await pushToGoogleSheets('save_keluar', { data: newOut });
+            Swal.fire('Tersimpan!', 'Arsip surat keluar baru berhasil disimpan ke Google Sheets.', 'success');
         });
 
         function renderAdminSuratKeluar() {
@@ -963,9 +986,9 @@
             tbody.innerHTML = '';
 
             const filtered = suratKeluarList.filter(item =>
-                item.no_surat.toLowerCase().includes(search) ||
-                item.tujuan.toLowerCase().includes(search) ||
-                item.perihal.toLowerCase().includes(search)
+                String(item.no_surat).toLowerCase().includes(search) ||
+                String(item.tujuan).toLowerCase().includes(search) ||
+                String(item.perihal).toLowerCase().includes(search)
             );
 
             if (filtered.length === 0) {
@@ -986,7 +1009,7 @@
                     </td>
                     <td class="px-4 py-3.5 text-slate-600 font-semibold">${item.penandatangan}</td>
                     <td class="px-4 py-3.5 text-center">
-                        <button onclick="deleteSuratKeluar('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-1.5 rounded-lg text-xs" title="Hapus">
+                        <button onclick="deleteSuratKeluar('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-1.5 rounded-lg text-xs">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -995,12 +1018,11 @@
             });
         }
 
-        function deleteSuratKeluar(id) {
+        async function deleteSuratKeluar(id) {
             suratKeluarList = suratKeluarList.filter(s => s.id !== id);
-            saveAllData();
+            await pushToGoogleSheets('delete_keluar', { id: id });
         }
 
-        // Cetak Bukti Registrasi / Lembar Disposisi
         function printTandaTerima(id) {
             const item = suratMasukList.find(s => s.id === id);
             if (!item) return;
@@ -1040,52 +1062,13 @@
             setTimeout(() => printArea.classList.add('hidden'), 500);
         }
 
-        // Export Buku Agenda Surat Masuk & Keluar ke Excel (.xlsx)
         function exportAgendaExcel() {
             const wb = XLSX.utils.book_new();
-            const wsMasuk = XLSX.utils.json_to_sheet(suratMasukList.map(s => ({
-                "Kode Registrasi": s.id,
-                "Tanggal Terima": s.tgl_terima,
-                "Nomor Surat": s.no_surat,
-                "Tanggal Surat": s.tgl_surat,
-                "Unit Pengirim": s.pengirim,
-                "Nama Pemohon": s.pemohon,
-                "No. WhatsApp": s.kontak,
-                "Kategori": s.kategori,
-                "Perihal": s.perihal,
-                "Status Verifikasi": s.status,
-                "Tujuan Disposisi": s.disposisi,
-                "Catatan Admin": s.catatan_admin
-            })));
-            const wsKeluar = XLSX.utils.json_to_sheet(suratKeluarList.map(k => ({
-                "ID Arsip": k.id,
-                "Nomor Surat Keluar": k.no_surat,
-                "Tanggal Surat": k.tgl_surat,
-                "Jenis Surat": k.jenis,
-                "Tujuan Penerima": k.tujuan,
-                "Perihal": k.perihal,
-                "Penandatangan": k.penandatangan
-            })));
-
+            const wsMasuk = XLSX.utils.json_to_sheet(suratMasukList);
+            const wsKeluar = XLSX.utils.json_to_sheet(suratKeluarList);
             XLSX.utils.book_append_sheet(wb, wsMasuk, "Agenda Surat Masuk");
             XLSX.utils.book_append_sheet(wb, wsKeluar, "Agenda Surat Keluar");
             XLSX.writeFile(wb, `Buku_Agenda_Surat_BITD_UMMU_${new Date().toISOString().split('T')[0]}.xlsx`);
-        }
-
-        function resetDemoData() {
-            Swal.fire({
-                title: 'Reset Data ke Default?',
-                text: 'Seluruh perubahan lokal akan dikembalikan ke data awal demo BITD.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Reset'
-            }).then((res) => {
-                if (res.isConfirmed) {
-                    localStorage.removeItem(KEY_SURAT_MASUK);
-                    localStorage.removeItem(KEY_SURAT_KELUAR);
-                    location.reload();
-                }
-            });
         }
 
         function toggleModal(id) {
@@ -1095,14 +1078,13 @@
             document.body.classList.toggle('modal-active');
         }
 
-        // Inisialisasi saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('pubTglSurat').value = new Date().toISOString().split('T')[0];
             if (isAdminLoggedIn) {
                 document.getElementById('btnLogout').classList.remove('hidden');
                 document.getElementById('btnLogout').classList.add('flex');
             }
-            updateAllViews();
+            loadDataFromCloud(false);
         });
     </script>
 </body>
