@@ -69,7 +69,7 @@
                             <i class="fab fa-whatsapp mr-1"></i> Notifikasi WA Otomatis Aktif
                         </span>
                     </div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Portal Pengajuan Surat Masuk & Arsip Resmi BITD (A4)</h1>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Portal Pengajuan Surat Masuk & Arsip Resmi BITD</h1>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
                         Kirimkan surat permohonan layanan IT, peminjaman ruangan/aset, permintaan data PDDikti, atau undangan resmi ke Biro Informasi Teknologi & Data (BITD) UMMU. Notifikasi pengajuan otomatis diteruskan ke WhatsApp Admin BITD.
                     </p>
@@ -116,7 +116,7 @@
                         <div class="bg-slate-900 px-6 py-4 text-white flex items-center justify-between">
                             <div>
                                 <h2 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-file-upload text-blue-400 mr-2"></i>Form Kirim Surat Masuk</h2>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Otomatis masuk ke Google Sheets & WA Admin BITD</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Otomatis masuk WA Admin BITD</p>
                             </div>
                         </div>
                         <form id="publicSuratForm" class="p-6 space-y-4">
@@ -174,7 +174,7 @@
                                 <label for="pubAutoWaAdmin" class="flex items-center gap-2.5 cursor-pointer select-none">
                                     <input type="checkbox" id="pubAutoWaAdmin" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
                                     <div>
-                                        <span class="block font-extrabold text-emerald-900 text-xs"><i class="fab fa-whatsapp text-emerald-600 mr-1"></i>Kirim Notifikasi WA Otomatis ke Admin BITD</span>
+                                        <span class="block font-extrabold text-emerald-900 text-xs"><i class="fab fa-whatsapp text-emerald-600 mr-1"></i>Kirim ke Admin BITD</span>
                                         <span class="block text-[10px] text-emerald-700">Meneruskan detail surat masuk ini langsung ke WhatsApp Admin BITD agar segera diverifikasi</span>
                                     </div>
                                 </label>
@@ -196,7 +196,7 @@
                                     <i class="fas fa-inbox"></i> Status Verifikasi Surat Masuk
                                 </button>
                                 <button id="pubTabBtnKeluar" onclick="switchPublicTab('keluar')" class="px-4 py-2.5 text-xs font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1.5">
-                                    <i class="fas fa-file-signature"></i> Surat Keluar Resmi BITD (A4)
+                                    <i class="fas fa-file-signature"></i> Surat Keluar Resmi BITD
                                 </button>
                             </div>
                             <button onclick="loadDataFromCloud(true)" class="text-[11px] font-bold text-blue-600 hover:underline py-2 px-2 flex items-center gap-1">
@@ -225,7 +225,7 @@
                                             <th class="px-4 py-3 text-left">Pengirim & No. Surat</th>
                                             <th class="px-4 py-3 text-left">Perihal & Disposisi</th>
                                             <th class="px-4 py-3 text-center">Status Verifikasi</th>
-                                            <th class="px-4 py-3 text-center">Aksi / Bukti (A4)</th>
+                                            <th class="px-4 py-3 text-center">Aksi / Bukti</th>
                                         </tr>
                                     </thead>
                                     <tbody id="publicQueueBody" class="divide-y divide-slate-100 bg-white"></tbody>
@@ -265,7 +265,7 @@
                         <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-extrabold uppercase">Administrator Mode</span>
                         <span class="text-xs text-slate-400 font-semibold">| WA Admin Aktif: <strong id="adminWaDisplay" class="text-emerald-600">081234567890</strong></span>
                     </div>
-                    <h2 class="text-xl font-extrabold text-slate-800 mt-1">Dashboard Verifikasi Surat, Notifikasi WA & Arsip Surat (A4)</h2>
+                    <h2 class="text-xl font-extrabold text-slate-800 mt-1">Dashboard Verifikasi Surat, Notifikasi WA & Arsip Surat </h2>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="openLogoModal()" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
@@ -278,7 +278,7 @@
                         <i class="fas fa-database"></i> Koneksi Google Sheets
                     </button>
                     <button onclick="openSuratKeluarModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
-                        <i class="fas fa-plus-circle"></i> Buat Surat Keluar (A4)
+                        <i class="fas fa-plus-circle"></i> Buat Surat Keluar
                     </button>
                     <button onclick="exportAgendaExcel()" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
                         <i class="fas fa-file-excel"></i> Export Excel
@@ -293,7 +293,7 @@
                     <span id="badgePendingCount" class="px-2 py-0.5 text-[10px] rounded-full bg-amber-100 text-amber-800">0</span>
                 </button>
                 <button id="tabBtnKeluar" onclick="switchAdminTab('keluar')" class="px-5 py-3 text-xs font-extrabold uppercase tracking-wider border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2">
-                    <i class="fas fa-paper-plane"></i> Arsip & Cetak Surat Keluar (A4)
+                    <i class="fas fa-paper-plane"></i> Arsip & Cetak Surat Keluar
                     <span id="badgeKeluarCount" class="px-2 py-0.5 text-[10px] rounded-full bg-slate-100 text-slate-700">0</span>
                 </button>
             </div>
