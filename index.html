@@ -1410,7 +1410,6 @@ _Wassalamu'alaikum Wr. Wb._
                             <label class="text-xs font-bold text-slate-600 uppercase">Password</label>
                             <input type="password" id="swalPass" class="w-full border rounded-xl p-2.5 text-sm mt-1" placeholder="•••••••">
                         </div>
-                        <p class="text-[11px] text-slate-400">Default Demo: user <b>admin</b> | pass <b>bitd123</b></p>
                     </div>
                 `,
                 confirmButtonText: 'Masuk Panel Admin',
@@ -1418,8 +1417,8 @@ _Wassalamu'alaikum Wr. Wb._
                 preConfirm: () => {
                     const u = document.getElementById('swalUser').value.trim();
                     const p = document.getElementById('swalPass').value.trim();
-                    if (u === 'admin' && p === 'bitd123') return true;
-                    Swal.showValidationMessage('Username atau Password salah! (Gunakan: admin / bitd123)');
+                    if (u === 'admin' && p === 'Bismillah2026') return true;
+                    Swal.showValidationMessage('Username atau Password salah!');
                     return false;
                 }
             }).then((res) => {
