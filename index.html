@@ -1861,10 +1861,10 @@ table.info td { padding: 4px 6px; vertical-align: top; }
             if (isAdminLoggedIn) { switchMode('admin'); return; }
             Swal.fire({
                 title: 'Login Admin BITD UMMU',
-                html: `<div class="text-left space-y-3 mt-2"><div><label class="text-xs font-bold uppercase">Username</label><input type="text" id="swalUser" class="w-full border rounded-xl p-2.5 text-sm mt-1" value="admin"></div><div><label class="text-xs font-bold uppercase">Password</label><input type="password" id="swalPass" class="w-full border rounded-xl p-2.5 text-sm mt-1" placeholder="•••••••"></div><p class="text-[11px] text-slate-400">Default: <b>admin</b> / <b>bitd123</b></p></div>`,
+                html: `<div class="text-left space-y-3 mt-2"><div><label class="text-xs font-bold uppercase">Username</label><input type="text" id="swalUser" class="w-full border rounded-xl p-2.5 text-sm mt-1" value="admin"></div><div><label class="text-xs font-bold uppercase">Password</label><input type="password" id="swalPass" class="w-full border rounded-xl p-2.5 text-sm mt-1" placeholder="•••••••"></div><p class="text-[11px] text-slate-400"> </p></div>`,
                 confirmButtonText: 'Masuk Panel Admin', showCancelButton: true,
                 preConfirm: () => {
-                    if (document.getElementById('swalUser').value.trim() === 'admin' && document.getElementById('swalPass').value.trim() === 'bitd123') return true;
+                    if (document.getElementById('swalUser').value.trim() === 'admin' && document.getElementById('swalPass').value.trim() === 'Bismillah2026') return true;
                     Swal.showValidationMessage('Username atau Password salah!'); return false;
                 }
             }).then((res) => {
