@@ -35,7 +35,7 @@
                     <span id="dbStatusText">Memeriksa DB...</span>
                 </div>
                 <button onclick="toggleModal('webSwitcherModal')" class="px-3 py-2 rounded-xl text-xs font-extrabold bg-indigo-600 hover:bg-indigo-500 text-white shadow transition flex items-center gap-1.5 border border-indigo-400/30">
-                    <i class="fas fa-th-large"></i> <span class="hidden sm:inline">LAYANAN BITD UMMU</span>
+                    <i class="fas fa-th-large"></i> <span class="hidden sm:inline">Ganti Web UMMU</span>
                 </button>
                 <button id="btnPublicView" onclick="switchMode('public')" class="px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow transition flex items-center gap-1.5">
                     <i class="fas fa-globe"></i> <span class="hidden md:inline">Publik</span>
@@ -58,21 +58,27 @@
         <!-- ========================================== -->
         <div id="publicSection">
             <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
-                <div class="relative z-10 max-w-4xl">
+                <div class="relative z-10 max-w-5xl">
                     <div class="flex flex-wrap items-center gap-2 mb-3">
                         <span class="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-bold uppercase tracking-wider">
-                            <i class="fas fa-cloud mr-1"></i> Database
+                            <i class="fas fa-cloud mr-1"></i> Google Sheets Publik
                         </span>
                         <button onclick="openJasaModal()" class="px-3.5 py-1 rounded-full bg-teal-600 hover:bg-teal-500 text-white text-[11px] font-extrabold shadow transition flex items-center gap-1.5">
-                            <i class="fas fa-tools"></i> Permohonan Jasa Teknis (Prodi/Biro)
+                            <i class="fas fa-tools"></i> Permohonan Jasa Teknis
                         </button>
                         <button onclick="openCctvModal()" class="px-3.5 py-1 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-extrabold shadow transition flex items-center gap-1.5">
-                            <i class="fas fa-video"></i> Laporan Kejadian & Akses CCTV
+                            <i class="fas fa-video"></i> Laporan & Akses CCTV
+                        </button>
+                        <button onclick="openNetModal()" class="px-3.5 py-1 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-900 text-[11px] font-extrabold shadow transition flex items-center gap-1.5">
+                            <i class="fas fa-wifi"></i> Lapor Gangguan Jaringan
+                        </button>
+                        <button onclick="copyLinkPengaduan()" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 text-white border border-white/20 text-[11px] font-bold transition flex items-center gap-1.5">
+                            <i class="fas fa-link"></i> Salin Link Pengaduan
                         </button>
                     </div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Portal E-Surat, Jasa Teknis IT & Akses CCTV BITD UMMU</h1>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Portal E-Surat, Jasa Teknis, CCTV & Pengaduan Jaringan BITD</h1>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Layanan satu pintu Biro Informasi Teknologi & Data (BITD) UMMU untuk pengajuan surat masuk, <strong>Permohonan Bantuan Jasa Teknis IT dari Prodi/Fakultas/Biro/Unit</strong>, serta Laporan Kejadian & Akses Rekaman CCTV.
+                        Layanan satu pintu Biro Informasi Teknologi & Data (BITD) UMMU untuk pengajuan surat masuk, Permohonan Jasa Teknis Prodi/Biro, Laporan Kejadian & Akses CCTV, serta Pengaduan Gangguan Jaringan Internet Kampus.
                     </p>
                 </div>
                 <i class="fas fa-paper-plane text-9xl text-white/5 absolute -right-4 -bottom-4 transform -rotate-12"></i>
@@ -88,17 +94,17 @@
                     </div>
                 </div>
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 flex items-center gap-3.5">
-                    <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg shrink-0"><i class="fas fa-clock"></i></div>
+                    <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg shrink-0"><i class="fas fa-wifi"></i></div>
                     <div>
-                        <div class="text-xl font-extrabold text-slate-800" id="pubStatPending">0</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase">Menunggu Verifikasi</div>
+                        <div class="text-xl font-extrabold text-slate-800" id="pubStatNet">0</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase">Pengaduan Jaringan</div>
                     </div>
                 </div>
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 flex items-center gap-3.5">
                     <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-lg shrink-0"><i class="fas fa-tools"></i></div>
                     <div>
                         <div class="text-xl font-extrabold text-slate-800" id="pubStatJasa">0</div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase">Permohonan Jasa Teknis</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase">Jasa Teknis</div>
                     </div>
                 </div>
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 flex items-center gap-3.5">
@@ -183,21 +189,24 @@
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                         <div class="flex border-b border-slate-200 bg-slate-50 px-3 pt-2 gap-1 justify-between items-center flex-wrap">
                             <div class="flex gap-1 overflow-x-auto">
-                                <button id="pubTabBtnMasuk" onclick="switchPublicTab('masuk')" class="px-3 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-blue-600 text-blue-600 flex items-center gap-1 whitespace-nowrap">
+                                <button id="pubTabBtnMasuk" onclick="switchPublicTab('masuk')" class="px-2.5 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-blue-600 text-blue-600 flex items-center gap-1 whitespace-nowrap">
                                     <i class="fas fa-inbox"></i> Surat Masuk
                                 </button>
-                                <button id="pubTabBtnJasa" onclick="switchPublicTab('jasa')" class="px-3 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap">
+                                <button id="pubTabBtnNet" onclick="switchPublicTab('net')" class="px-2.5 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap">
+                                    <i class="fas fa-wifi text-amber-500"></i> Jaringan
+                                </button>
+                                <button id="pubTabBtnJasa" onclick="switchPublicTab('jasa')" class="px-2.5 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap">
                                     <i class="fas fa-tools text-teal-600"></i> Jasa Teknis
                                 </button>
-                                <button id="pubTabBtnKeluar" onclick="switchPublicTab('keluar')" class="px-3 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap">
+                                <button id="pubTabBtnKeluar" onclick="switchPublicTab('keluar')" class="px-2.5 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap">
                                     <i class="fas fa-file-signature"></i> Surat Keluar
                                 </button>
-                                <button id="pubTabBtnCctv" onclick="switchPublicTab('cctv')" class="px-3 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap">
-                                    <i class="fas fa-video text-rose-500"></i> Akses CCTV
+                                <button id="pubTabBtnCctv" onclick="switchPublicTab('cctv')" class="px-2.5 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap">
+                                    <i class="fas fa-video text-rose-500"></i> CCTV
                                 </button>
                             </div>
                             <button onclick="loadDataFromCloud(true)" class="text-[11px] font-bold text-blue-600 hover:underline py-2 px-2 flex items-center gap-1">
-                                <i class="fas fa-sync-alt"></i> Refresh
+                                <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
 
@@ -229,10 +238,34 @@
                             </div>
                         </div>
 
-                        <!-- TAB PUBLIK 2: PERMOHONAN JASA TEKNIS -->
+                        <!-- TAB PUBLIK 2: PENGADUAN GANGGUAN JARINGAN & BALASAN -->
+                        <div id="pubTabContentNet" class="hidden p-4 space-y-4">
+                            <div class="flex flex-col sm:flex-row gap-2 justify-between">
+                                <input type="text" id="publicSearchNet" onkeyup="renderPublicNet()" placeholder="Cari Kode NET-BITD, pelapor, lokasi, atau balasan..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none">
+                                <button onclick="openNetModal()" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl text-xs font-extrabold shadow shrink-0">
+                                    <i class="fas fa-plus-circle mr-1"></i> Lapor Gangguan
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                                <table class="min-w-full divide-y divide-slate-200 text-xs">
+                                    <thead class="bg-slate-900 text-white uppercase text-[10px] tracking-wider font-extrabold">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left">Kode / Tgl</th>
+                                            <th class="px-4 py-3 text-left">Pelapor & Lokasi</th>
+                                            <th class="px-4 py-3 text-left">Gangguan & Balasan Resmi BITD</th>
+                                            <th class="px-4 py-3 text-center">Status</th>
+                                            <th class="px-4 py-3 text-center">WA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="publicNetBody" class="divide-y divide-slate-100 bg-white"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB PUBLIK 3: PERMOHONAN JASA TEKNIS -->
                         <div id="pubTabContentJasa" class="hidden p-4 space-y-4">
                             <div class="flex flex-col sm:flex-row gap-2 justify-between">
-                                <input type="text" id="publicSearchJasa" onkeyup="renderPublicJasa()" placeholder="Cari Kode JST-BITD, Prodi/Biro, atau jenis jasa teknis..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none">
+                                <input type="text" id="publicSearchJasa" onkeyup="renderPublicJasa()" placeholder="Cari Kode JST-BITD, Prodi/Biro, atau jenis jasa..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none">
                                 <button onclick="openJasaModal()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl text-xs font-extrabold shadow shrink-0">
                                     <i class="fas fa-plus-circle mr-1"></i> Buat Surat Jasa Teknis
                                 </button>
@@ -253,7 +286,7 @@
                             </div>
                         </div>
 
-                        <!-- TAB PUBLIK 3: SURAT KELUAR RESMI -->
+                        <!-- TAB PUBLIK 4: SURAT KELUAR RESMI -->
                         <div id="pubTabContentKeluar" class="hidden p-4 space-y-4">
                             <input type="text" id="publicSearchKeluar" onkeyup="renderPublicSuratKeluar()" placeholder="Cari nomor surat keluar, tujuan, jenis surat, atau perihal..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none">
                             <div class="overflow-x-auto border border-slate-200 rounded-xl">
@@ -271,7 +304,7 @@
                             </div>
                         </div>
 
-                        <!-- TAB PUBLIK 4: LAPORAN CCTV -->
+                        <!-- TAB PUBLIK 5: LAPORAN CCTV -->
                         <div id="pubTabContentCctv" class="hidden p-4 space-y-4">
                             <div class="flex flex-col sm:flex-row gap-2 justify-between">
                                 <input type="text" id="publicSearchCctv" onkeyup="renderPublicCctv()" placeholder="Cari Kode CCTV-BITD, nama pelapor, atau lokasi..." class="flex-grow bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none">
@@ -309,7 +342,7 @@
                         <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-extrabold uppercase">Administrator Mode</span>
                         <span class="text-xs text-slate-400 font-semibold">| WA Admin Aktif: <strong id="adminWaDisplay" class="text-emerald-600">081234567890</strong></span>
                     </div>
-                    <h2 class="text-xl font-extrabold text-slate-800 mt-1">Dashboard E-Surat, Jasa Teknis & Laporan CCTV BITD</h2>
+                    <h2 class="text-xl font-extrabold text-slate-800 mt-1">Dashboard E-Surat, Jaringan, Jasa Teknis & CCTV BITD</h2>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="openLogoModal()" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
@@ -336,8 +369,12 @@
                     <i class="fas fa-inbox"></i> Surat Masuk
                     <span id="badgePendingCount" class="px-2 py-0.5 text-[10px] rounded-full bg-amber-100 text-amber-800">0</span>
                 </button>
+                <button id="tabBtnNet" onclick="switchAdminTab('net')" class="px-4 py-3 text-xs font-extrabold uppercase tracking-wider border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fas fa-wifi text-amber-500"></i> Pengaduan Jaringan
+                    <span id="badgeNetCount" class="px-2 py-0.5 text-[10px] rounded-full bg-amber-100 text-amber-800">0</span>
+                </button>
                 <button id="tabBtnJasa" onclick="switchAdminTab('jasa')" class="px-4 py-3 text-xs font-extrabold uppercase tracking-wider border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
-                    <i class="fas fa-tools text-teal-600"></i> Permohonan Jasa Teknis
+                    <i class="fas fa-tools text-teal-600"></i> Jasa Teknis
                     <span id="badgeJasaCount" class="px-2 py-0.5 text-[10px] rounded-full bg-teal-100 text-teal-800">0</span>
                 </button>
                 <button id="tabBtnKeluar" onclick="switchAdminTab('keluar')" class="px-4 py-3 text-xs font-extrabold uppercase tracking-wider border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
@@ -398,7 +435,33 @@
                 </div>
             </div>
 
-            <!-- TAB 2 ADMIN: PERMOHONAN JASA TEKNIS -->
+            <!-- TAB 2 ADMIN: PENGADUAN GANGGUAN JARINGAN & BALASAN -->
+            <div id="adminTabNet" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center">
+                    <input type="text" id="admSearchNet" onkeyup="renderAdminNet()" placeholder="Cari kode NET-BITD, pelapor, lokasi, atau keluhan..." class="w-full sm:w-96 bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold">
+                    <button onclick="copyLinkPengaduan()" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow flex items-center gap-1.5">
+                        <i class="fas fa-link"></i> Salin Link Form Pengaduan Jaringan
+                    </button>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-200 text-xs">
+                            <thead class="bg-slate-900 text-white uppercase text-[10px] tracking-wider font-extrabold">
+                                <tr>
+                                    <th class="px-4 py-3.5 text-left">Kode & Tgl</th>
+                                    <th class="px-4 py-3.5 text-left">Pelapor & WA</th>
+                                    <th class="px-4 py-3.5 text-left">Gangguan & Lokasi</th>
+                                    <th class="px-4 py-3.5 text-left">Status & Balasan Admin</th>
+                                    <th class="px-4 py-3.5 text-center">Aksi Balas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminNetBody" class="divide-y divide-slate-100 bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3 ADMIN: PERMOHONAN JASA TEKNIS -->
             <div id="adminTabJasa" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center">
                     <input type="text" id="admSearchJasa" onkeyup="renderAdminJasa()" placeholder="Cari kode JST-BITD, Prodi/Biro, lokasi, atau uraian jasa..." class="w-full sm:w-96 bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold">
@@ -425,7 +488,7 @@
                 </div>
             </div>
 
-            <!-- TAB 3 ADMIN: SURAT KELUAR -->
+            <!-- TAB 4 ADMIN: SURAT KELUAR -->
             <div id="adminTabKeluar" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center">
                     <input type="text" id="admSearchKeluar" onkeyup="renderAdminSuratKeluar()" placeholder="Cari nomor surat keluar, tujuan, jenis surat, atau perihal..." class="w-full sm:w-96 bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold">
@@ -450,7 +513,7 @@
                 </div>
             </div>
 
-            <!-- TAB 4 ADMIN: LAPORAN CCTV -->
+            <!-- TAB 5 ADMIN: LAPORAN CCTV -->
             <div id="adminTabCctv" class="hidden space-y-4">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center">
                     <input type="text" id="admSearchCctv" onkeyup="renderAdminCctv()" placeholder="Cari kode CCTV, pelapor, lokasi, atau kronologi..." class="w-full sm:w-96 bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold">
@@ -485,7 +548,7 @@
         <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl z-50 overflow-hidden max-h-[90vh] flex flex-col">
             <div class="bg-slate-900 px-6 py-4 text-white flex justify-between items-center shrink-0">
                 <div>
-                    <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-th-large text-indigo-400 mr-2"></i>LAYANAN BITD UMMU</h3>
+                    <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-th-large text-indigo-400 mr-2"></i>Pindah / Ganti Aplikasi Web Ekosistem UMMU</h3>
                     <p class="text-[11px] text-slate-400">Pilih layanan aplikasi web resmi Universitas Muhammadiyah Maluku Utara</p>
                 </div>
                 <button onclick="toggleModal('webSwitcherModal')" class="text-slate-400 hover:text-white"><i class="fas fa-times text-lg"></i></button>
@@ -783,6 +846,103 @@
         </div>
     </div>
 
+    <!-- MODAL 7: FORM PENGADUAN GANGGUAN JARINGAN (PEMOHON / PUBLIK) -->
+    <div id="netModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('netModal')"></div>
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl z-50 overflow-hidden max-h-[92vh] flex flex-col">
+            <div class="bg-amber-600 px-6 py-4 text-white flex justify-between items-center shrink-0">
+                <div>
+                    <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-wifi mr-2"></i>Pengaduan Gangguan Jaringan & Internet</h3>
+                    <p class="text-[11px] text-amber-100">Laporan langsung masuk ke Tim Jaringan BITD UMMU untuk segera ditindaklanjuti</p>
+                </div>
+                <button onclick="toggleModal('netModal')" class="text-amber-100 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="netForm" class="p-6 space-y-4 text-xs overflow-y-auto flex-grow">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div><label class="block text-[11px] font-extrabold uppercase mb-1">Nama Pelapor *</label><input type="text" id="netNama" required placeholder="Nama lengkap" class="w-full bg-slate-50 border rounded-xl p-2.5 font-semibold"></div>
+                    <div><label class="block text-[11px] font-extrabold uppercase mb-1">No. WhatsApp Aktif *</label><input type="tel" id="netKontak" required placeholder="081234567890" class="w-full bg-slate-50 border rounded-xl p-2.5 font-semibold"></div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div><label class="block text-[11px] font-extrabold uppercase mb-1">Unit / Fakultas / Prodi *</label><input type="text" id="netUnit" required placeholder="Contoh: Fak. Teknik / BAAK" class="w-full bg-slate-50 border rounded-xl p-2.5 font-semibold"></div>
+                    <div>
+                        <label class="block text-[11px] font-extrabold uppercase mb-1">Jenis Gangguan *</label>
+                        <select id="netJenis" required class="w-full bg-slate-50 border rounded-xl p-2.5 font-bold">
+                            <option value="WiFi / Internet Mati Total">WiFi / Internet Mati Total</option>
+                            <option value="Koneksi Sangat Lambat / Putus-Putus">Koneksi Sangat Lambat / Putus-Putus</option>
+                            <option value="Tidak Bisa Login Hotspot / Akun Bermasalah">Tidak Bisa Login Hotspot / Akun</option>
+                            <option value="Kabel LAN / Port Jaringan Rusak">Kabel LAN / Port Jaringan Rusak</option>
+                            <option value="Access Point / Router Mati">Access Point / Router Mati</option>
+                        </select>
+                    </div>
+                </div>
+                <div><label class="block text-[11px] font-extrabold uppercase mb-1">Lokasi Ruangan / Gedung Terdampak *</label><input type="text" id="netLokasi" required placeholder="Contoh: Ruang Dosen Lt. 2 / Lab Komputer 1" class="w-full bg-slate-50 border rounded-xl p-2.5 font-semibold"></div>
+                <div><label class="block text-[11px] font-extrabold uppercase mb-1">Deskripsi Keluhan / Gangguan *</label><textarea id="netDeskripsi" rows="3" required placeholder="Jelaskan kendala yang dialami agar teknisi bisa membawa alat yang tepat..." class="w-full bg-slate-50 border rounded-xl p-2.5 font-semibold"></textarea></div>
+                <div><label class="block text-[11px] font-extrabold uppercase mb-1">Link Screenshot / Foto Bukti (Opsional)</label><input type="url" id="netLinkBukti" placeholder="Tempel link Google Drive / foto jika ada" class="w-full bg-slate-50 border rounded-xl p-2.5 font-semibold"></div>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                    <label for="netAutoWaAdmin" class="flex items-center gap-2.5 cursor-pointer select-none">
+                        <input type="checkbox" id="netAutoWaAdmin" checked class="w-4 h-4 text-emerald-600 rounded">
+                        <div>
+                            <span class="block font-extrabold text-emerald-900 text-xs"><i class="fab fa-whatsapp text-emerald-600 mr-1"></i>Kirim Laporan Langsung ke WA Admin BITD</span>
+                            <span class="block text-[10px] text-emerald-700">Mempercepat respon teknisi jaringan di lapangan</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t">
+                    <button type="button" onclick="toggleModal('netModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 font-bold">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold shadow">Kirim Pengaduan Sekarang</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 8: BALAS PENGADUAN GANGGUAN JARINGAN (KHUSUS ADMIN BITD) -->
+    <div id="replyNetModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('replyNetModal')"></div>
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl z-50 overflow-hidden">
+            <div class="bg-slate-900 px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="text-sm font-extrabold uppercase tracking-wider"><i class="fas fa-reply text-amber-400 mr-2"></i>Balas & Tindak Lanjuti Pengaduan Jaringan</h3>
+                <button onclick="toggleModal('replyNetModal')" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="replyNetForm" class="p-6 space-y-4 text-xs">
+                <input type="hidden" id="repNetId">
+                <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-200 space-y-1">
+                    <div class="font-extrabold text-amber-800" id="repNetInfoKode"></div>
+                    <div class="font-bold text-slate-800" id="repNetInfoPelapor"></div>
+                    <div class="text-slate-600" id="repNetInfoKeluhan"></div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Status Penanganan *</label>
+                        <select id="repNetStatus" required class="w-full bg-slate-50 border rounded-xl p-2.5 font-bold">
+                            <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+                            <option value="Dijadwalkan / Proses Teknisi">Sedang Ditangani Teknisi</option>
+                            <option value="Selesai">Selesai / Jaringan Normal</option>
+                            <option value="Ditolak">Ditolak / Tidak Valid</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Teknisi Penanggung Jawab *</label>
+                        <input type="text" id="repNetTeknisi" value="Tim Jaringan BITD UMMU" required class="w-full bg-slate-50 border rounded-xl p-2.5 font-bold">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-extrabold text-slate-600 uppercase mb-1">Balasan Resmi / Tindakan Perbaikan Admin *</label>
+                    <textarea id="repNetBalasan" rows="3" required placeholder="Contoh: Teknisi sedang menuju lokasi / Access Point telah di-restart dan jaringan kembali normal..." class="w-full bg-slate-50 border rounded-xl p-2.5 font-semibold"></textarea>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="repNetAutoWa" checked class="w-4 h-4 text-emerald-600 rounded">
+                        <span class="font-extrabold text-emerald-900"><i class="fab fa-whatsapp text-emerald-600 mr-1"></i>Kirim Balasan Otomatis ke WhatsApp Pemohon</span>
+                    </label>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t">
+                    <button type="button" onclick="toggleModal('replyNetModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 font-bold">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold shadow">Simpan & Kirim Balasan WA</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-5 border-t border-slate-800 mt-12">
         <div class="container mx-auto px-4 max-w-7xl flex flex-col sm:flex-row justify-between items-center text-xs gap-2">
@@ -790,18 +950,19 @@
                 <img id="footerLogoImg" src="" alt="Logo UMMU" class="w-6 h-6 object-contain bg-white rounded-md p-0.5">
                 <p>&copy; 2026 <strong id="footerKopBiro">Biro Informasi Teknologi & Data (BITD)</strong> — <span id="footerKopUniv">Universitas Muhammadiyah Maluku Utara</span>.</p>
             </div>
-            <p class="text-[11px] text-slate-500">E-Surat, Jasa Teknis & CCTV BITD UMMU — Format Resmi A4</p>
+            <p class="text-[11px] text-slate-500">E-Surat, Pengaduan Jaringan, Jasa Teknis & CCTV BITD UMMU — Format Resmi A4</p>
         </div>
     </footer>
 
     <script>
         // TEMPEL URL WEB APP GOOGLE APPS SCRIPT (/exec) ANDA DI BAWAH INI:
-        const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycby2_0avv81j5eNgGzArBBtDA3N-HCn3YBcP4Ezz7FivTXzECtmVErV2ddYEQGp4OUV4QA/exec';
+        const DEFAULT_GAS_URL = '';
 
         const KEY_SURAT_MASUK = 'bitd_ummu_surat_masuk_v2';
         const KEY_SURAT_KELUAR = 'bitd_ummu_surat_keluar_v2';
         const KEY_CCTV = 'bitd_ummu_laporan_cctv_v1';
         const KEY_JASA = 'bitd_ummu_jasa_teknis_v1';
+        const KEY_NET = 'bitd_ummu_pengaduan_net_v1';
         const KEY_SETTINGS = 'bitd_ummu_settings_v2';
         const KEY_WEBS = 'bitd_ummu_webs_v2';
         const KEY_GAS_URL = 'bitd_ummu_gas_url_v2';
@@ -869,6 +1030,7 @@
         }];
         let laporanCctvList = JSON.parse(localStorage.getItem(KEY_CCTV)) || [];
         let jasaTeknisList = JSON.parse(localStorage.getItem(KEY_JASA)) || [];
+        let pengaduanNetList = JSON.parse(localStorage.getItem(KEY_NET)) || [];
         let appSettings = JSON.parse(localStorage.getItem(KEY_SETTINGS)) || defaultSettings;
         let webLinksList = JSON.parse(localStorage.getItem(KEY_WEBS)) || defaultWebLinks;
 
@@ -877,6 +1039,7 @@
         function saveLocalKeluar() { localStorage.setItem(KEY_SURAT_KELUAR, JSON.stringify(suratKeluarList)); }
         function saveLocalCctv() { localStorage.setItem(KEY_CCTV, JSON.stringify(laporanCctvList)); }
         function saveLocalJasa() { localStorage.setItem(KEY_JASA, JSON.stringify(jasaTeknisList)); }
+        function saveLocalNet() { localStorage.setItem(KEY_NET, JSON.stringify(pengaduanNetList)); }
 
         function formatPhoneToWa(phoneStr) {
             let p = String(phoneStr || '').replace(/[^0-9]/g, '');
@@ -886,7 +1049,7 @@
         }
 
         function formatTanggalIndo(dateStr) {
-            if (!dateStr) return '20 November 2026';
+            if (!dateStr) return '21 November 2026';
             const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             const parts = String(dateStr).split('-');
             return parts.length === 3 ? `${parseInt(parts[2], 10)} ${bulan[parseInt(parts[1], 10) - 1] || 'November'} ${parts[0]}` : dateStr;
@@ -1016,6 +1179,7 @@
                     if (Array.isArray(result.surat_keluar) && result.surat_keluar.length > 0) { suratKeluarList = result.surat_keluar; saveLocalKeluar(); }
                     if (Array.isArray(result.laporan_cctv)) { laporanCctvList = result.laporan_cctv; saveLocalCctv(); }
                     if (Array.isArray(result.jasa_teknis)) { jasaTeknisList = result.jasa_teknis; saveLocalJasa(); }
+                    if (Array.isArray(result.pengaduan_jaringan)) { pengaduanNetList = result.pengaduan_jaringan; saveLocalNet(); }
                     if (result.settings && Object.keys(result.settings).length > 0) { appSettings = { ...defaultSettings, ...result.settings }; localStorage.setItem(KEY_SETTINGS, JSON.stringify(appSettings)); applyLogoAndKopSettings(); }
                     if (Array.isArray(result.web_links) && result.web_links.length > 0) { webLinksList = result.web_links; localStorage.setItem(KEY_WEBS, JSON.stringify(webLinksList)); }
                     updateDbStatusIndicator('connected', 'Google Sheets Aktif'); updateAllViews();
@@ -1025,7 +1189,7 @@
         }
 
         async function pushToGoogleSheets(action, payloadObj) {
-            saveLocalMasuk(); saveLocalKeluar(); saveLocalCctv(); saveLocalJasa(); updateAllViews();
+            saveLocalMasuk(); saveLocalKeluar(); saveLocalCctv(); saveLocalJasa(); saveLocalNet(); updateAllViews();
             if (!gasWebAppUrl) return true;
             try {
                 updateDbStatusIndicator('loading', 'Menyimpan...');
@@ -1044,15 +1208,16 @@
 
         function updateAllViews() {
             document.getElementById('pubStatTotal').innerText = suratMasukList.length;
-            document.getElementById('pubStatPending').innerText = suratMasukList.filter(s => s.status === 'Menunggu Verifikasi').length;
+            document.getElementById('pubStatNet').innerText = pengaduanNetList.length;
             document.getElementById('pubStatJasa').innerText = jasaTeknisList.length;
             document.getElementById('pubStatDone').innerText = suratMasukList.filter(s => s.status === 'Selesai').length;
             document.getElementById('badgePendingCount').innerText = suratMasukList.filter(s => s.status === 'Menunggu Verifikasi').length;
+            document.getElementById('badgeNetCount').innerText = pengaduanNetList.filter(n => n.status === 'Menunggu Verifikasi').length;
             document.getElementById('badgeJasaCount').innerText = jasaTeknisList.filter(j => j.status === 'Menunggu Verifikasi').length;
             document.getElementById('badgeKeluarCount').innerText = suratKeluarList.length;
             document.getElementById('badgeCctvCount').innerText = laporanCctvList.filter(c => c.status === 'Menunggu Verifikasi').length;
-            renderPublicQueue(); renderPublicJasa(); renderPublicSuratKeluar(); renderPublicCctv();
-            renderAdminSuratMasuk(); renderAdminJasa(); renderAdminSuratKeluar(); renderAdminCctv(); renderWebSwitcher();
+            renderPublicQueue(); renderPublicNet(); renderPublicJasa(); renderPublicSuratKeluar(); renderPublicCctv();
+            renderAdminSuratMasuk(); renderAdminNet(); renderAdminJasa(); renderAdminSuratKeluar(); renderAdminCctv(); renderWebSwitcher();
         }
 
         function getStatusBadge(status) {
@@ -1063,20 +1228,129 @@
         }
 
         function switchPublicTab(tab) {
-            ['masuk', 'jasa', 'keluar', 'cctv'].forEach(t => {
+            ['masuk', 'net', 'jasa', 'keluar', 'cctv'].forEach(t => {
                 const cap = t.charAt(0).toUpperCase() + t.slice(1);
                 document.getElementById(`pubTabContent${cap}`).classList.toggle('hidden', t !== tab);
-                document.getElementById(`pubTabBtn${cap}`).className = t === tab ? "px-3 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-blue-600 text-blue-600 flex items-center gap-1 whitespace-nowrap" : "px-3 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap";
+                document.getElementById(`pubTabBtn${cap}`).className = t === tab ? "px-2.5 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-blue-600 text-blue-600 flex items-center gap-1 whitespace-nowrap" : "px-2.5 py-2.5 text-[11px] font-extrabold uppercase border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-1 whitespace-nowrap";
             });
         }
 
         function switchAdminTab(tab) {
-            ['masuk', 'jasa', 'keluar', 'cctv'].forEach(t => {
+            ['masuk', 'net', 'jasa', 'keluar', 'cctv'].forEach(t => {
                 const cap = t.charAt(0).toUpperCase() + t.slice(1);
                 document.getElementById(`adminTab${cap}`).classList.toggle('hidden', t !== tab);
                 document.getElementById(`tabBtn${cap}`).className = t === tab ? "px-4 py-3 text-xs font-extrabold uppercase tracking-wider border-b-2 border-blue-600 text-blue-600 flex items-center gap-2 whitespace-nowrap" : "px-4 py-3 text-xs font-extrabold uppercase tracking-wider border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap";
             });
         }
+
+        // =========================================================================
+        // MODUL PENGADUAN & BALAS GANGGUAN JARINGAN + LINK LANGSUNG (?menu=pengaduan)
+        // =========================================================================
+        function copyLinkPengaduan() {
+            const directLink = `${window.location.origin}${window.location.pathname}?menu=pengaduan`;
+            navigator.clipboard.writeText(directLink).then(() => {
+                Swal.fire({
+                    icon: 'success', title: 'Link Pengaduan Disalin!',
+                    html: `<code class="text-xs bg-slate-100 p-2 rounded block mt-1 text-blue-700 font-bold">${directLink}</code><span class="text-xs text-slate-500 mt-2 block">Bagikan link ini agar pemohon langsung masuk ke formulir Pengaduan Gangguan Jaringan.</span>`,
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+
+        function openNetModal() { document.getElementById('netForm').reset(); toggleModal('netModal'); }
+
+        function buildWaNetToAdmin(n) {
+            const adminPhone = formatPhoneToWa(appSettings.admin_wa || defaultSettings.admin_wa);
+            const linkPelacakan = `${window.location.origin}${window.location.pathname}?menu=pengaduan`;
+            const msg = `*PENGADUAN GANGGUAN JARINGAN - BITD UMMU*\nAssalamu'alaikum Admin BITD,\n\n📌 *Kode:* ${n.id}\n👤 *Pelapor:* ${n.nama_pelapor} (${n.unit_pelapor})\n📱 *WA Pelapor:* ${n.kontak}\n📶 *Jenis Gangguan:* ${n.jenis_gangguan}\n📍 *Lokasi:* ${n.lokasi_gangguan}\n📝 *Detail:* ${n.deskripsi}\n🔗 *Link Pengaduan:* ${linkPelacakan}\n\nMohon segera ditindaklanjuti.`;
+            return `https://wa.me/${adminPhone}?text=${encodeURIComponent(msg)}`;
+        }
+
+        function buildWaNetReplyToPemohon(n) {
+            const linkPelacakan = `${window.location.origin}${window.location.pathname}`;
+            const msg = `*BALASAN PENGADUAN JARINGAN - BITD UMMU*\nAssalamu'alaikum Wr. Wb.\nYth. Bapak/Ibu *${n.nama_pelapor}* (${n.unit_pelapor}),\n\nTindak lanjut atas laporan gangguan jaringan Anda:\n📌 *Kode Laporan:* ${n.id}\n📍 *Lokasi:* ${n.lokasi_gangguan}\n✅ *Status:* *${n.status.toUpperCase()}*\n👷 *Teknisi:* ${n.teknisi}\n💬 *Balasan / Tindakan BITD:*\n_"${n.balasan_admin}"_\n\nPantau status layanan di: ${linkPelacakan}\n*Admin Biro IT & Data (BITD) UMMU*`;
+            return `https://wa.me/${formatPhoneToWa(n.kontak)}?text=${encodeURIComponent(msg)}`;
+        }
+
+        document.getElementById('netForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const autoWa = document.getElementById('netAutoWaAdmin').checked;
+            const newId = `NET-BITD-2026-${Math.floor(1000 + Math.random() * 9000)}`, today = new Date().toISOString().split('T')[0];
+            const item = {
+                id: newId, tgl_lapor: today, nama_pelapor: document.getElementById('netNama').value.trim(),
+                kontak: document.getElementById('netKontak').value.trim(), unit_pelapor: document.getElementById('netUnit').value.trim(),
+                jenis_gangguan: document.getElementById('netJenis').value, lokasi_gangguan: document.getElementById('netLokasi').value.trim(),
+                deskripsi: document.getElementById('netDeskripsi').value.trim(), link_bukti: document.getElementById('netLinkBukti').value.trim(),
+                status: 'Menunggu Verifikasi', teknisi: 'Belum Ditugaskan',
+                balasan_admin: 'Laporan gangguan diterima. Tim Jaringan BITD akan segera merespon.'
+            };
+
+            const waUrl = buildWaNetToAdmin(item);
+            pengaduanNetList.unshift(item);
+            toggleModal('netModal');
+            switchPublicTab('net');
+            if (autoWa) window.open(waUrl, '_blank');
+            await pushToGoogleSheets('save_net', { data: item, notify_target: 'admin' });
+
+            Swal.fire({
+                icon: 'success', title: 'Pengaduan Jaringan Terkirim!',
+                html: `Kode Laporan Anda:<br><b class="text-lg text-amber-600 font-mono">${newId}</b><br><span class="text-xs text-slate-500">Balasan dari Admin BITD akan tampil di tabel & dikirim ke WA Anda.</span>`,
+                confirmButtonText: 'OK'
+            });
+        });
+
+        function renderPublicNet() {
+            const q = (document.getElementById('publicSearchNet')?.value || '').toLowerCase(), tbody = document.getElementById('publicNetBody');
+            if (!tbody) return; tbody.innerHTML = '';
+            const f = pengaduanNetList.filter(n => String(n.id).toLowerCase().includes(q) || String(n.nama_pelapor).toLowerCase().includes(q) || String(n.lokasi_gangguan).toLowerCase().includes(q) || String(n.balasan_admin).toLowerCase().includes(q));
+            if (!f.length) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400">Belum ada pengaduan gangguan jaringan.</td></tr>`; return; }
+            f.forEach(n => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-amber-600 block">${n.id}</span><span class="text-[10px] text-slate-400">${n.tgl_lapor}</span></td><td class="px-4 py-3"><div class="font-bold text-slate-800">${n.nama_pelapor}</div><div class="text-[10px] text-slate-500">${n.unit_pelapor} — <b>${n.lokasi_gangguan}</b></div></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-800 rounded text-[10px] font-bold">${n.jenis_gangguan}</span><div class="text-slate-700 mt-0.5">${n.deskripsi}</div><div class="mt-1.5 p-2 rounded-lg bg-blue-50 border border-blue-100 text-[11px] text-blue-900"><strong><i class="fas fa-reply mr-1"></i>Balasan BITD (${n.teknisi}):</strong> ${n.balasan_admin}</div></td><td class="px-4 py-3 text-center whitespace-nowrap">${getStatusBadge(n.status)}</td><td class="px-4 py-3 text-center"><button onclick="window.open(buildWaNetToAdmin(pengaduanNetList.find(x=>x.id==='${n.id}')),'_blank')" class="bg-emerald-50 text-emerald-700 p-1.5 rounded-lg text-[11px]" title="Follow-up WA Admin"><i class="fab fa-whatsapp"></i></button></td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderAdminNet() {
+            const q = (document.getElementById('admSearchNet')?.value || '').toLowerCase(), tbody = document.getElementById('adminNetBody');
+            if (!tbody) return; tbody.innerHTML = '';
+            const f = pengaduanNetList.filter(n => String(n.id).toLowerCase().includes(q) || String(n.nama_pelapor).toLowerCase().includes(q) || String(n.lokasi_gangguan).toLowerCase().includes(q) || String(n.deskripsi).toLowerCase().includes(q));
+            if (!f.length) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400">Belum ada pengaduan gangguan jaringan.</td></tr>`; return; }
+            f.forEach(n => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-amber-600 block">${n.id}</span><span class="text-[10px] text-slate-400">${n.tgl_lapor}</span></td><td class="px-4 py-3 whitespace-nowrap"><div class="font-bold text-slate-800">${n.nama_pelapor}</div><div class="text-[10px] text-slate-500">${n.unit_pelapor}</div><div class="text-[10px] text-emerald-600 font-bold"><i class="fab fa-whatsapp"></i> ${n.kontak}</div></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-800 rounded text-[10px] font-bold">${n.jenis_gangguan}</span><div class="font-bold text-slate-800 mt-0.5">${n.lokasi_gangguan}</div><div class="text-slate-600 text-[11px]">${n.deskripsi}</div></td><td class="px-4 py-3"><div class="mb-1">${getStatusBadge(n.status)}</div><div class="text-[10px] font-bold text-slate-600">Teknisi: ${n.teknisi}</div><div class="text-[10px] text-blue-700 italic max-w-xs truncate" title="${n.balasan_admin}">Balasan: ${n.balasan_admin}</div></td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="openReplyNetModal('${n.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shadow"><i class="fas fa-reply mr-1"></i> Balas</button><button onclick="deleteNet('${n.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-1.5 rounded-lg text-[11px]"><i class="fas fa-trash"></i></button></td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openReplyNetModal(id) {
+            const n = pengaduanNetList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (!n) return;
+            document.getElementById('repNetId').value = n.id;
+            document.getElementById('repNetInfoKode').innerText = `${n.id} — ${n.jenis_gangguan}`;
+            document.getElementById('repNetInfoPelapor').innerText = `Pelapor: ${n.nama_pelapor} (${n.unit_pelapor} | Lokasi: ${n.lokasi_gangguan})`;
+            document.getElementById('repNetInfoKeluhan').innerText = `Keluhan: ${n.deskripsi}`;
+            document.getElementById('repNetStatus').value = n.status;
+            document.getElementById('repNetTeknisi').value = n.teknisi === 'Belum Ditugaskan' ? 'Tim Jaringan BITD UMMU' : n.teknisi;
+            document.getElementById('repNetBalasan').value = n.balasan_admin;
+            toggleModal('replyNetModal');
+        }
+
+        document.getElementById('replyNetForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('repNetId').value, idx = pengaduanNetList.findIndex(x => String(x.id).toUpperCase() === String(id).toUpperCase());
+            if (idx === -1) return;
+            pengaduanNetList[idx].status = document.getElementById('repNetStatus').value;
+            pengaduanNetList[idx].teknisi = document.getElementById('repNetTeknisi').value.trim();
+            pengaduanNetList[idx].balasan_admin = document.getElementById('repNetBalasan').value.trim();
+
+            const waUrl = buildWaNetReplyToPemohon(pengaduanNetList[idx]);
+            toggleModal('replyNetModal');
+            if (document.getElementById('repNetAutoWa').checked && pengaduanNetList[idx].kontak) window.open(waUrl, '_blank');
+            await pushToGoogleSheets('save_net', { data: pengaduanNetList[idx], notify_target: 'pengaju' });
+            Swal.fire({ icon: 'success', title: 'Balasan Tersimpan & WA Dibuka!', timer: 1400, showConfirmButton: false });
+        });
+
+        async function deleteNet(id) { pengaduanNetList = pengaduanNetList.filter(x => String(x.id).toUpperCase() !== String(id).toUpperCase()); await pushToGoogleSheets('delete_net', { id: id }); }
 
         // SURAT MASUK
         function renderPublicQueue() {
@@ -1138,22 +1412,18 @@
 
         async function deleteSuratMasuk(id) { suratMasukList = suratMasukList.filter(s => String(s.id).toUpperCase() !== String(id).toUpperCase()); await pushToGoogleSheets('delete_masuk', { id: id }); }
 
-        // =========================================================================
-        // MODUL PERMOHONAN JASA TEKNIS + WA OTOMATIS DARI SISI PUBLIK
-        // =========================================================================
+        // PERMOHONAN JASA TEKNIS
         function buildWhatsAppUrlJasaToAdmin(j) {
             const adminPhone = formatPhoneToWa(appSettings.admin_wa || defaultSettings.admin_wa);
-            const msgWa = `*PERMOHONAN JASA TEKNIS KE BITD UMMU*\nAssalamu'alaikum Admin BITD,\n\n📌 *Kode:* ${j.id}\n📄 *No. Surat:* ${j.no_surat}\n🏢 *Unit:* ${j.tingkat_unit} - ${j.nama_unit}\n👤 *Pimpinan:* ${j.nama_pimpinan} (${j.jabatan_pimpinan})\n📱 *PIC:* ${j.nama_pic} (${j.kontak})\n🔧 *Jenis Jasa:* ${j.jenis_jasa}\n📍 *Lokasi:* ${j.lokasi_kerja}\n📅 *Target:* ${formatTanggalIndo(j.tgl_pelaksanaan)}\n📝 *Uraian:* ${j.uraian_kebutuhan}\n\nMohon segera diverifikasi di Panel Admin E-Surat BITD UMMU.`;
+            const msgWa = `*PERMOHONAN JASA TEKNIS KE BITD UMMU*\nAssalamu'alaikum Admin BITD,\n\n📌 *Kode:* ${j.id}\n📄 *No. Surat:* ${j.no_surat}\n🏢 *Unit:* ${j.tingkat_unit} - ${j.nama_unit}\n👤 *Pimpinan:* ${j.nama_pimpinan} (${j.jabatan_pimpinan})\n📱 *PIC:* ${j.nama_pic} (${j.kontak})\n🔧 *Jenis Jasa:* ${j.jenis_jasa}\n📍 *Lokasi:* ${j.lokasi_kerja}\n📅 *Target:* ${formatTanggalIndo(j.tgl_pelaksanaan)}\n📝 *Uraian:* ${j.uraian_kebutuhan}`;
             return `https://wa.me/${adminPhone}?text=${encodeURIComponent(msgWa)}`;
         }
         function sendWaJasaToAdmin(id) { const j = jasaTeknisList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (j) window.open(buildWhatsAppUrlJasaToAdmin(j), '_blank'); }
-
         function openJasaModal() { document.getElementById('jasaForm').reset(); document.getElementById('jasaTglPelaksanaan').value = new Date().toISOString().split('T')[0]; toggleModal('jasaModal'); }
 
         document.getElementById('jasaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const autoWa = document.getElementById('jasaAutoWaAdmin') ? document.getElementById('jasaAutoWaAdmin').checked : true;
-            const newId = `JST-BITD-2026-${Math.floor(1000 + Math.random() * 9000)}`, today = new Date().toISOString().split('T')[0];
+            const autoWa = document.getElementById('jasaAutoWaAdmin').checked, newId = `JST-BITD-2026-${Math.floor(1000 + Math.random() * 9000)}`, today = new Date().toISOString().split('T')[0];
             const newJasa = {
                 id: newId, no_surat: document.getElementById('jasaNoSurat').value.trim(), tgl_pengajuan: today,
                 tingkat_unit: document.getElementById('jasaTingkat').value, nama_unit: document.getElementById('jasaNamaUnit').value.trim(),
@@ -1163,140 +1433,78 @@
                 tgl_pelaksanaan: document.getElementById('jasaTglPelaksanaan').value, uraian_kebutuhan: document.getElementById('jasaUraian').value.trim(),
                 status: 'Menunggu Verifikasi', teknisi: 'Belum Ditugaskan', catatan_admin: 'Permohonan jasa teknis diterima.'
             };
-
             const waAdminUrl = buildWhatsAppUrlJasaToAdmin(newJasa);
-            jasaTeknisList.unshift(newJasa);
-            toggleModal('jasaModal');
+            jasaTeknisList.unshift(newJasa); toggleModal('jasaModal');
             if (autoWa) window.open(waAdminUrl, '_blank');
             await pushToGoogleSheets('save_jasa', { data: newJasa, notify_target: 'admin' });
-
-            Swal.fire({
-                icon: 'success', title: 'Permohonan Jasa Teknis Terkirim!',
-                html: `Kode Registrasi:<br><b class="text-lg text-teal-600 font-mono">${newId}</b><br><span class="text-xs text-slate-500">Notifikasi WA telah diteruskan ke Admin BITD.</span>`,
-                showDenyButton: true, showCancelButton: true,
-                confirmButtonText: '<i class="fas fa-print mr-1"></i> Cetak Surat (A4)',
-                denyButtonText: '<i class="fab fa-whatsapp mr-1"></i> Kirim Ulang WA Admin',
-                denyButtonColor: '#10b981', cancelButtonText: 'Tutup'
-            }).then(res => {
-                if (res.isConfirmed) printSuratJasaTeknisA4(newId);
-                else if (res.isDenied) window.open(waAdminUrl, '_blank');
-            });
+            Swal.fire({ icon: 'success', title: 'Permohonan Jasa Teknis Terkirim!', html: `Kode:<br><b class="text-lg text-teal-600 font-mono">${newId}</b>`, showDenyButton: true, showCancelButton: true, confirmButtonText: 'Cetak (A4)', denyButtonText: 'WA Admin', denyButtonColor: '#10b981' }).then(res => { if (res.isConfirmed) printSuratJasaTeknisA4(newId); else if (res.isDenied) window.open(waAdminUrl, '_blank'); });
         });
 
         function renderPublicJasa() {
             const q = (document.getElementById('publicSearchJasa')?.value || '').toLowerCase(), tbody = document.getElementById('publicJasaBody');
             if (!tbody) return; tbody.innerHTML = '';
-            const filtered = jasaTeknisList.filter(j => String(j.id).toLowerCase().includes(q) || String(j.nama_unit).toLowerCase().includes(q) || String(j.jenis_jasa).toLowerCase().includes(q) || String(j.lokasi_kerja).toLowerCase().includes(q));
-            if (!filtered.length) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400">Belum ada permohonan jasa teknis.</td></tr>`; return; }
-            filtered.forEach(j => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-teal-600 block">${j.id}</span><span class="text-[10px] text-slate-400">${j.tgl_pengajuan}</span></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-teal-50 text-teal-800 rounded text-[10px] font-bold">${j.tingkat_unit}</span><div class="font-bold text-slate-800 mt-0.5">${j.nama_unit}</div><div class="text-[10px] text-slate-500">${j.nama_pimpinan}</div></td><td class="px-4 py-3"><div class="font-bold text-slate-800">${j.jenis_jasa}</div><div class="text-[10px] text-slate-500">Lokasi: ${j.lokasi_kerja} | Target: ${j.tgl_pelaksanaan}</div></td><td class="px-4 py-3 text-center whitespace-nowrap">${getStatusBadge(j.status)}</td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratJasaTeknisA4('${j.id}')" class="bg-teal-600 hover:bg-teal-700 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold"><i class="fas fa-print"></i> A4</button><button onclick="sendWaJasaToAdmin('${j.id}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 p-1.5 rounded-lg text-[11px]"><i class="fab fa-whatsapp"></i></button></td>`;
-                tbody.appendChild(tr);
-            });
+            const f = jasaTeknisList.filter(j => String(j.id).toLowerCase().includes(q) || String(j.nama_unit).toLowerCase().includes(q) || String(j.jenis_jasa).toLowerCase().includes(q));
+            if (!f.length) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400">Belum ada permohonan jasa teknis.</td></tr>`; return; }
+            f.forEach(j => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-teal-600 block">${j.id}</span><span class="text-[10px] text-slate-400">${j.tgl_pengajuan}</span></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-teal-50 text-teal-800 rounded text-[10px] font-bold">${j.tingkat_unit}</span><div class="font-bold mt-0.5">${j.nama_unit}</div></td><td class="px-4 py-3"><div class="font-bold">${j.jenis_jasa}</div><div class="text-[10px] text-slate-500">${j.lokasi_kerja}</div></td><td class="px-4 py-3 text-center">${getStatusBadge(j.status)}</td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratJasaTeknisA4('${j.id}')" class="bg-teal-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold">A4</button><button onclick="sendWaJasaToAdmin('${j.id}')" class="bg-emerald-50 text-emerald-700 p-1.5 rounded-lg text-[11px]"><i class="fab fa-whatsapp"></i></button></td>`; tbody.appendChild(tr); });
         }
 
         function renderAdminJasa() {
             const q = (document.getElementById('admSearchJasa')?.value || '').toLowerCase(), tbody = document.getElementById('adminJasaBody');
             if (!tbody) return; tbody.innerHTML = '';
-            const filtered = jasaTeknisList.filter(j => String(j.id).toLowerCase().includes(q) || String(j.nama_unit).toLowerCase().includes(q) || String(j.jenis_jasa).toLowerCase().includes(q) || String(j.uraian_kebutuhan).toLowerCase().includes(q));
-            if (!filtered.length) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Belum ada permohonan jasa teknis.</td></tr>`; return; }
-            filtered.forEach(j => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-teal-600 block">${j.id}</span><span class="text-[10px] font-mono text-slate-500">${j.no_surat}</span></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-teal-50 text-teal-700 rounded text-[10px] font-bold">${j.tingkat_unit}</span><div class="font-extrabold text-slate-800 mt-0.5">${j.nama_unit}</div><div class="text-[10px] text-slate-500">${j.nama_pimpinan}</div></td><td class="px-4 py-3 whitespace-nowrap"><div class="font-bold">${j.nama_pic}</div><button onclick="sendWaJasaToPic('${j.id}')" class="text-[10px] text-emerald-600 font-bold"><i class="fab fa-whatsapp"></i> ${j.kontak}</button></td><td class="px-4 py-3"><div class="font-bold text-slate-800">${j.jenis_jasa}</div><div class="text-[10px] text-slate-500">Lokasi: ${j.lokasi_kerja} (${j.tgl_pelaksanaan})</div><div class="text-[10px] text-slate-600 italic truncate max-w-xs" title="${j.uraian_kebutuhan}">${j.uraian_kebutuhan}</div></td><td class="px-4 py-3"><select onchange="quickUpdateStatusJasa('${j.id}', this.value)" class="w-full bg-slate-50 border rounded-lg px-2 py-1 text-[11px] font-bold cursor-pointer"><option value="Menunggu Verifikasi" ${j.status === 'Menunggu Verifikasi' ? 'selected' : ''}>⏳ Menunggu</option><option value="Dijadwalkan / Proses Teknisi" ${j.status === 'Dijadwalkan / Proses Teknisi' ? 'selected' : ''}>🔧 Proses Teknisi</option><option value="Selesai" ${j.status === 'Selesai' ? 'selected' : ''}>✅ Selesai</option><option value="Ditolak" ${j.status === 'Ditolak' ? 'selected' : ''}>❌ Ditolak</option></select><div class="text-[10px] text-slate-500 mt-1">Teknisi: <b>${j.teknisi || 'Tim BITD'}</b></div></td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratJasaTeknisA4('${j.id}')" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold"><i class="fas fa-print"></i> A4</button><button onclick="sendWaJasaToPic('${j.id}')" class="bg-emerald-500 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold"><i class="fab fa-whatsapp"></i></button><button onclick="deleteJasa('${j.id}')" class="bg-rose-50 text-rose-600 p-1.5 rounded-lg text-[11px]"><i class="fas fa-trash"></i></button></td>`;
-                tbody.appendChild(tr);
-            });
+            const f = jasaTeknisList.filter(j => String(j.id).toLowerCase().includes(q) || String(j.nama_unit).toLowerCase().includes(q) || String(j.jenis_jasa).toLowerCase().includes(q));
+            if (!f.length) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Belum ada permohonan jasa teknis.</td></tr>`; return; }
+            f.forEach(j => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-teal-600 block">${j.id}</span><span class="text-[10px] font-mono text-slate-500">${j.no_surat}</span></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-teal-50 text-teal-700 rounded text-[10px] font-bold">${j.tingkat_unit}</span><div class="font-extrabold mt-0.5">${j.nama_unit}</div></td><td class="px-4 py-3 whitespace-nowrap"><div class="font-bold">${j.nama_pic}</div><button onclick="sendWaJasaToPic('${j.id}')" class="text-[10px] text-emerald-600 font-bold"><i class="fab fa-whatsapp"></i> ${j.kontak}</button></td><td class="px-4 py-3"><div class="font-bold">${j.jenis_jasa}</div><div class="text-[10px] text-slate-500">${j.lokasi_kerja}</div></td><td class="px-4 py-3"><select onchange="quickUpdateStatusJasa('${j.id}', this.value)" class="w-full bg-slate-50 border rounded-lg px-2 py-1 text-[11px] font-bold"><option value="Menunggu Verifikasi" ${j.status === 'Menunggu Verifikasi' ? 'selected' : ''}>⏳ Menunggu</option><option value="Dijadwalkan / Proses Teknisi" ${j.status === 'Dijadwalkan / Proses Teknisi' ? 'selected' : ''}>🔧 Proses</option><option value="Selesai" ${j.status === 'Selesai' ? 'selected' : ''}>✅ Selesai</option><option value="Ditolak" ${j.status === 'Ditolak' ? 'selected' : ''}>❌ Ditolak</option></select></td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratJasaTeknisA4('${j.id}')" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold">A4</button><button onclick="sendWaJasaToPic('${j.id}')" class="bg-emerald-500 text-white px-2 py-1.5 rounded-lg text-[11px]"><i class="fab fa-whatsapp"></i></button><button onclick="deleteJasa('${j.id}')" class="bg-rose-50 text-rose-600 p-1.5 rounded-lg text-[11px]"><i class="fas fa-trash"></i></button></td>`; tbody.appendChild(tr); });
         }
 
-        async function quickUpdateStatusJasa(id, newStatus) {
+        async function quickUpdateStatusJasa(id, st) {
             const idx = jasaTeknisList.findIndex(j => String(j.id).toUpperCase() === String(id).toUpperCase()); if (idx === -1) return;
-            jasaTeknisList[idx].status = newStatus;
-            if (newStatus === 'Dijadwalkan / Proses Teknisi' && jasaTeknisList[idx].teknisi === 'Belum Ditugaskan') jasaTeknisList[idx].teknisi = 'Tim Teknisi BITD UMMU';
+            jasaTeknisList[idx].status = st; if (st === 'Dijadwalkan / Proses Teknisi' && jasaTeknisList[idx].teknisi === 'Belum Ditugaskan') jasaTeknisList[idx].teknisi = 'Tim Teknisi BITD UMMU';
             await pushToGoogleSheets('save_jasa', { data: jasaTeknisList[idx], notify_target: 'pengaju' });
-            Swal.fire({ icon: 'success', title: `Status Jasa: ${newStatus}`, text: 'Kirim notifikasi WhatsApp ke PIC Unit?', showCancelButton: true, confirmButtonColor: '#10b981', confirmButtonText: 'Kirim WA' }).then(r => { if (r.isConfirmed) sendWaJasaToPic(id); });
+            Swal.fire({ icon: 'success', title: `Status Jasa: ${st}`, showCancelButton: true, confirmButtonColor: '#10b981', confirmButtonText: 'Kirim WA PIC' }).then(r => { if (r.isConfirmed) sendWaJasaToPic(id); });
         }
-
-        function sendWaJasaToPic(id) {
-            const j = jasaTeknisList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (!j) return;
-            const msg = `*UPDATE PERMOHONAN JASA TEKNIS BITD UMMU*\nYth. *${j.nama_pic}* (${j.nama_unit}),\n\n📌 *Kode:* ${j.id}\n🔧 *Jasa:* ${j.jenis_jasa}\n📍 *Lokasi:* ${j.lokasi_kerja}\n✅ *Status Terbaru:* *${j.status.toUpperCase()}*\n👷 *Pelaksana:* ${j.teknisi}\n\nTerima kasih.\n_Admin Biro IT & Data (BITD) UMMU_`;
-            window.open(`https://wa.me/${formatPhoneToWa(j.kontak)}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
+        function sendWaJasaToPic(id) { const j = jasaTeknisList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (j) window.open(`https://wa.me/${formatPhoneToWa(j.kontak)}?text=${encodeURIComponent('*UPDATE JASA TEKNIS BITD UMMU*\nKode: ' + j.id + '\nStatus: *' + j.status.toUpperCase() + '*')}`, '_blank'); }
         async function deleteJasa(id) { jasaTeknisList = jasaTeknisList.filter(j => String(j.id).toUpperCase() !== String(id).toUpperCase()); await pushToGoogleSheets('delete_jasa', { id: id }); }
 
         function printSuratJasaTeknisA4(id) {
             const j = jasaTeknisList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (!j) return;
-            const kopLogoSrc = appSettings.kop_logo || appSettings.app_logo || DEFAULT_LOGO_UMMU;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent('JASA TEKNIS BITD UMMU | ' + j.id + ' | ' + j.nama_unit + ' | ' + j.status)}`;
+            const logo = appSettings.kop_logo || DEFAULT_LOGO_UMMU, qr = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent('JASA TEKNIS BITD | ' + j.id)}`;
             const win = window.open('', '_blank');
-            win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Surat Permohonan Jasa Teknis - ${j.id}</title><style>@page{size:A4 portrait;margin:16mm 20mm;}body{font-family:'Times New Roman',serif;font-size:11.5pt;color:#000;line-height:1.45;margin:0;background:#f1f5f9;}.page{width:210mm;min-height:297mm;margin:15px auto;background:#fff;padding:16mm 20mm;box-sizing:border-box;box-shadow:0 4px 18px rgba(0,0,0,0.08);}.header{display:flex;align-items:center;border-bottom:3px double #000;padding-bottom:10px;margin-bottom:16px;}.header img{width:72px;height:72px;object-fit:contain;margin-right:14px;}.header-text{text-align:center;flex:1;}.header-text h3{margin:0;font-size:13pt;text-transform:uppercase;}.header-text h2{margin:2px 0;font-size:14.5pt;text-transform:uppercase;}.header-text p{margin:0;font-size:9.5pt;font-style:italic;}table.info{width:100%;border-collapse:collapse;margin:10px 0 14px 0;}table.info td{padding:4px 6px;vertical-align:top;}.box{border:1px solid #000;padding:10px 12px;min-height:55px;margin-bottom:14px;text-align:justify;background:#fafafa;}@media print{.no-print{display:none!important;}body{background:#fff;}.page{width:100%;margin:0;padding:0;box-shadow:none;}}</style></head><body><div class="no-print" style="text-align:right;padding:12px 24px;background:#fff;border-bottom:1px solid #e2e8f0;"><button onclick="window.print()" style="background:#0d9488;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">Cetak / Simpan PDF (A4)</button></div><div class="page"><div class="header"><img src="${kopLogoSrc}"><div class="header-text"><h3>${appSettings.kop_univ || defaultSettings.kop_univ}</h3><h2>${j.nama_unit}</h2><p>${appSettings.kop_alamat || defaultSettings.kop_alamat}</p></div></div><table style="width:100%;margin-bottom:16px;"><tr><td style="width:90px;">Nomor</td><td style="width:12px;">:</td><td>${j.no_surat}</td><td style="text-align:right;">Ternate, ${formatTanggalIndo(j.tgl_pengajuan)}</td></tr><tr><td>Kode Reg.</td><td>:</td><td><strong>${j.id}</strong></td><td></td></tr><tr><td>Perihal</td><td>:</td><td colspan="2"><strong>Permohonan Bantuan Jasa Teknis IT</strong></td></tr></table><div style="margin:12px 0 16px 0;"><p style="margin:0;">Kepada YTH :</p><p style="margin:2px 0;font-weight:bold;">Kepala Biro Informasi Teknologi dan Data (BITD)</p><p style="margin:0;font-weight:bold;">Universitas Muhammadiyah Maluku Utara</p><p style="margin:0;">Di <span style="padding-left:18px;">Tempat</span></p></div><p style="font-style:italic;font-weight:bold;margin-bottom:10px;">Assalamu’Alaikum Wr. Wb.</p><p style="text-align:justify;margin-bottom:12px;">Alhamdulillah, Puji syukur kita panjatkan kehadirat Allah SWT atas segala limpahan Rahmat dan Hidayah-Nya yang diberikan kepada kita semua, Aamiin.</p><p style="text-align:justify;margin-bottom:10px;">Sehubungan dengan kebutuhan operasional di lingkungan <strong>${j.tingkat_unit} — ${j.nama_unit}</strong>, dengan ini kami mengajukan permohonan bantuan jasa teknis kepada Biro BITD UMMU dengan rincian:</p><table class="info"><tr><td style="width:34%;">Unit Kerja Pengaju</td><td style="width:3%;">:</td><td><strong>${j.tingkat_unit} — ${j.nama_unit}</strong></td></tr><tr><td>Jenis Jasa Teknis</td><td>:</td><td><strong>${j.jenis_jasa}</strong></td></tr><tr><td>Lokasi Pekerjaan</td><td>:</td><td>${j.lokasi_kerja}</td></tr><tr><td>Target Pelaksanaan</td><td>:</td><td>${formatTanggalIndo(j.tgl_pelaksanaan)}</td></tr><tr><td>Penanggung Jawab (PIC)</td><td>:</td><td>${j.nama_pic} (WA: ${j.kontak})</td></tr><tr><td>Status Verifikasi BITD</td><td>:</td><td><strong>${j.status.toUpperCase()}</strong></td></tr></table><div style="font-weight:bold;margin-bottom:4px;">Uraian Rinci Kebutuhan / Kendala Teknis:</div><div class="box">${j.uraian_kebutuhan.replace(/\n/g, '<br>')}</div><p style="text-align:justify;margin-bottom:12px;">Demikian surat permohonan jasa teknis ini kami sampaikan. Atas bantuan dan kerja sama Tim Biro BITD UMMU kami ucapkan terima kasih.</p><p style="font-style:italic;font-weight:bold;margin-bottom:20px;">Wabillahi taufiq wal hidayah, Wassalamu’Alaikum Wr. Wb.</p><table style="width:100%;text-align:center;margin-top:16px;"><tr><td style="width:50%;vertical-align:top;"><div>Pemohon,</div><div style="font-weight:bold;">${j.jabatan_pimpinan}</div><div style="height:82px;"></div><div style="font-weight:bold;text-decoration:underline;">${j.nama_pimpinan}</div></td><td style="width:50%;vertical-align:top;"><div>Verifikasi & Disposisi BITD,</div><div style="font-weight:bold;margin-bottom:6px;">Kepala Biro BITD UMMU</div><div style="margin:6px auto;width:82px;padding:4px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;"><img src="${qrUrl}" style="width:74px;height:74px;display:block;margin:0 auto;"></div><div style="font-weight:bold;text-decoration:underline;margin-top:4px;">Erwin Gunawan, S.Kom., M.MT</div><div style="font-size:10pt;">NIDN. 1217028302</div></td></tr></table></div></body></html>`);
+            win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${j.id}</title><style>@page{size:A4 portrait;margin:16mm 20mm;}body{font-family:'Times New Roman',serif;font-size:11.5pt;line-height:1.45;margin:0;background:#f1f5f9;}.page{width:210mm;min-height:297mm;margin:15px auto;background:#fff;padding:16mm 20mm;box-sizing:border-box;}.header{display:flex;align-items:center;border-bottom:3px double #000;padding-bottom:10px;margin-bottom:16px;}.header img{width:72px;height:72px;object-fit:contain;margin-right:14px;}@media print{.no-print{display:none!important;}body{background:#fff;}.page{width:100%;margin:0;padding:0;}}</style></head><body><div class="no-print" style="text-align:right;padding:12px 24px;background:#fff;"><button onclick="window.print()" style="background:#0d9488;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">Cetak PDF (A4)</button></div><div class="page"><div class="header"><img src="${logo}"><div style="text-align:center;flex:1;"><h3 style="margin:0;">${appSettings.kop_univ || defaultSettings.kop_univ}</h3><h2 style="margin:2px 0;">${j.nama_unit}</h2><p style="margin:0;font-size:9.5pt;font-style:italic;">${appSettings.kop_alamat || defaultSettings.kop_alamat}</p></div></div><table style="width:100%;margin-bottom:16px;"><tr><td style="width:90px;">Nomor</td><td>: ${j.no_surat}</td><td style="text-align:right;">Ternate, ${formatTanggalIndo(j.tgl_pengajuan)}</td></tr><tr><td>Kode Reg.</td><td colspan="2">: <strong>${j.id}</strong></td></tr><tr><td>Perihal</td><td colspan="2">: <strong>Permohonan Bantuan Jasa Teknis IT</strong></td></tr></table><div style="margin:12px 0 16px 0;">Kepada YTH :<br><strong>Kepala Biro Informasi Teknologi dan Data (BITD) UMMU</strong><br>Di <span style="padding-left:18px;">Tempat</span></div><p style="font-style:italic;font-weight:bold;">Assalamu’Alaikum Wr. Wb.</p><p style="text-align:justify;">Alhamdulillah, Puji syukur kita panjatkan kehadirat Allah SWT atas segala limpahan Rahmat dan Hidayah-Nya. Sehubungan dengan kebutuhan operasional di lingkungan <strong>${j.tingkat_unit} — ${j.nama_unit}</strong>, kami mengajukan permohonan bantuan jasa teknis kepada Biro BITD UMMU:</p><table style="width:100%;margin-bottom:12px;"><tr><td style="width:34%;padding:4px;">Jenis Jasa Teknis</td><td>: <strong>${j.jenis_jasa}</strong></td></tr><tr><td style="padding:4px;">Lokasi Pekerjaan</td><td>: ${j.lokasi_kerja}</td></tr><tr><td style="padding:4px;">Target Pelaksanaan</td><td>: ${formatTanggalIndo(j.tgl_pelaksanaan)}</td></tr><tr><td style="padding:4px;">PIC Lapangan</td><td>: ${j.nama_pic} (${j.kontak})</td></tr></table><div style="font-weight:bold;margin-bottom:4px;">Uraian Kebutuhan:</div><div style="border:1px solid #000;padding:10px;min-height:55px;margin-bottom:14px;">${j.uraian_kebutuhan.replace(/\n/g, '<br>')}</div><p style="font-style:italic;font-weight:bold;">Wabillahi taufiq wal hidayah, Wassalamu’Alaikum Wr. Wb.</p><table style="width:100%;text-align:center;margin-top:20px;"><tr><td style="width:50%;vertical-align:top;"><div>Pemohon,</div><div style="font-weight:bold;">${j.jabatan_pimpinan}</div><div style="height:82px;"></div><div style="font-weight:bold;text-decoration:underline;">${j.nama_pimpinan}</div></td><td style="width:50%;vertical-align:top;"><div>Mengetahui,</div><div style="font-weight:bold;margin-bottom:6px;">Kepala Biro BITD UMMU</div><div style="margin:6px auto;width:82px;padding:4px;border:1px solid #cbd5e1;border-radius:6px;"><img src="${qr}" style="width:74px;height:74px;display:block;margin:0 auto;"></div><div style="font-weight:bold;text-decoration:underline;margin-top:4px;">Erwin Gunawan, S.Kom., M.MT</div><div style="font-size:10pt;">NIDN. 1217028302</div></td></tr></table></div></body></html>`);
             win.document.close();
         }
 
-        // =========================================================================
-        // MODUL AKSES CCTV + WA OTOMATIS + CETAK A4 RAPI
-        // =========================================================================
+        // AKSES CCTV
         function buildWhatsAppUrlCctvToAdmin(c) {
             const adminPhone = formatPhoneToWa(appSettings.admin_wa || defaultSettings.admin_wa);
-            const msgWa = `*LAPORAN KEJADIAN & AKSES CCTV - BITD UMMU*\nAssalamu'alaikum Admin BITD,\n\n📌 *Kode:* ${c.id}\n👤 *Pelapor:* ${c.nama_pelapor} (ID: ${c.identitas})\n🏢 *Unit:* ${c.unit_pelapor}\n📱 *WA Pelapor:* ${c.kontak}\n⚠️ *Jenis:* ${c.jenis_kejadian}\n📍 *Lokasi CCTV:* ${c.lokasi_cctv}\n🕒 *Waktu:* ${formatTanggalIndo(c.tgl_kejadian)} (${formatJamIndo(c.jam_mulai)} - ${formatJamIndo(c.jam_selesai)} WIT)\n📝 *Kronologi:* ${c.kronologi}\n\nMohon segera diverifikasi di Panel Admin E-Surat BITD UMMU.`;
+            const msgWa = `*LAPORAN KEJADIAN & AKSES CCTV - BITD UMMU*\n📌 *Kode:* ${c.id}\n👤 *Pelapor:* ${c.nama_pelapor} (${c.unit_pelapor})\n⚠️ *Jenis:* ${c.jenis_kejadian}\n📍 *Lokasi:* ${c.lokasi_cctv}\n🕒 *Waktu:* ${formatTanggalIndo(c.tgl_kejadian)} (${formatJamIndo(c.jam_mulai)} - ${formatJamIndo(c.jam_selesai)} WIT)\n📝 *Kronologi:* ${c.kronologi}`;
             return `https://wa.me/${adminPhone}?text=${encodeURIComponent(msgWa)}`;
         }
         function sendWaCctvToAdmin(id) { const c = laporanCctvList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (c) window.open(buildWhatsAppUrlCctvToAdmin(c), '_blank'); }
-
         function openCctvModal() { document.getElementById('cctvForm').reset(); document.getElementById('cctvTglKejadian').value = new Date().toISOString().split('T')[0]; toggleModal('cctvModal'); }
 
         document.getElementById('cctvForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const autoWa = document.getElementById('cctvAutoWaAdmin') ? document.getElementById('cctvAutoWaAdmin').checked : true;
-            const newId = `CCTV-BITD-2026-${Math.floor(1000 + Math.random() * 9000)}`, today = new Date().toISOString().split('T')[0];
-            const c = {
-                id: newId, tgl_lapor: today, nama_pelapor: document.getElementById('cctvNama').value.trim(),
-                identitas: document.getElementById('cctvIdentitas').value.trim(), unit_pelapor: document.getElementById('cctvUnit').value.trim(),
-                kontak: document.getElementById('cctvKontak').value.trim(), jenis_kejadian: document.getElementById('cctvJenis').value,
-                lokasi_cctv: document.getElementById('cctvLokasi').value.trim(), tgl_kejadian: document.getElementById('cctvTglKejadian').value,
-                jam_mulai: document.getElementById('cctvJamMulai').value, jam_selesai: document.getElementById('cctvJamSelesai').value,
-                kronologi: document.getElementById('cctvKronologi').value.trim(), keperluan: document.getElementById('cctvKeperluan').value.trim(),
-                status: 'Menunggu Verifikasi', catatan_admin: 'Menunggu verifikasi Admin BITD.'
-            };
-
+            const autoWa = document.getElementById('cctvAutoWaAdmin').checked, newId = `CCTV-BITD-2026-${Math.floor(1000 + Math.random() * 9000)}`, today = new Date().toISOString().split('T')[0];
+            const c = { id: newId, tgl_lapor: today, nama_pelapor: document.getElementById('cctvNama').value.trim(), identitas: document.getElementById('cctvIdentitas').value.trim(), unit_pelapor: document.getElementById('cctvUnit').value.trim(), kontak: document.getElementById('cctvKontak').value.trim(), jenis_kejadian: document.getElementById('cctvJenis').value, lokasi_cctv: document.getElementById('cctvLokasi').value.trim(), tgl_kejadian: document.getElementById('cctvTglKejadian').value, jam_mulai: document.getElementById('cctvJamMulai').value, jam_selesai: document.getElementById('cctvJamSelesai').value, kronologi: document.getElementById('cctvKronologi').value.trim(), keperluan: document.getElementById('cctvKeperluan').value.trim(), status: 'Menunggu Verifikasi', catatan_admin: 'Menunggu verifikasi Admin BITD.' };
             const waAdminUrl = buildWhatsAppUrlCctvToAdmin(c);
-            laporanCctvList.unshift(c);
-            toggleModal('cctvModal');
+            laporanCctvList.unshift(c); toggleModal('cctvModal');
             if (autoWa) window.open(waAdminUrl, '_blank');
             await pushToGoogleSheets('save_cctv', { data: c, notify_target: 'admin' });
-
-            Swal.fire({
-                icon: 'success', title: 'Laporan CCTV Terkirim!',
-                html: `Kode Registrasi:<br><b class="text-lg text-rose-600 font-mono">${newId}</b><br><span class="text-xs text-slate-500">Notifikasi WA telah diteruskan ke Admin BITD.</span>`,
-                showDenyButton: true, showCancelButton: true,
-                confirmButtonText: '<i class="fas fa-print mr-1"></i> Cetak Surat (A4)',
-                denyButtonText: '<i class="fab fa-whatsapp mr-1"></i> Kirim Ulang WA Admin',
-                denyButtonColor: '#10b981', cancelButtonText: 'Tutup'
-            }).then(r => {
-                if (r.isConfirmed) printSuratCctvA4(newId);
-                else if (r.isDenied) window.open(waAdminUrl, '_blank');
-            });
+            Swal.fire({ icon: 'success', title: 'Laporan CCTV Terkirim!', html: `Kode:<br><b class="text-lg text-rose-600 font-mono">${newId}</b>`, showDenyButton: true, showCancelButton: true, confirmButtonText: 'Cetak (A4)', denyButtonText: 'WA Admin', denyButtonColor: '#10b981' }).then(r => { if (r.isConfirmed) printSuratCctvA4(newId); else if (r.isDenied) window.open(waAdminUrl, '_blank'); });
         });
 
         function renderPublicCctv() {
             const q = (document.getElementById('publicSearchCctv')?.value || '').toLowerCase(), tbody = document.getElementById('publicCctvBody'); if (!tbody) return; tbody.innerHTML = '';
             const f = laporanCctvList.filter(c => String(c.id).toLowerCase().includes(q) || String(c.nama_pelapor).toLowerCase().includes(q) || String(c.lokasi_cctv).toLowerCase().includes(q));
             if (!f.length) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400">Belum ada laporan CCTV.</td></tr>`; return; }
-            f.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-rose-600 block">${c.id}</span><span class="text-[10px] text-slate-400">${c.tgl_lapor}</span></td><td class="px-4 py-3"><div class="font-bold">${c.nama_pelapor}</div><div class="text-[10px] text-slate-500">${c.unit_pelapor}</div></td><td class="px-4 py-3"><div class="font-bold">${c.lokasi_cctv}</div><div class="text-[10px] text-slate-500">${formatTanggalIndo(c.tgl_kejadian)} (${formatJamIndo(c.jam_mulai)} - ${formatJamIndo(c.jam_selesai)} WIT)</div></td><td class="px-4 py-3 text-center">${getStatusBadge(c.status)}</td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratCctvA4('${c.id}')" class="bg-rose-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold"><i class="fas fa-print"></i> A4</button><button onclick="sendWaCctvToAdmin('${c.id}')" class="bg-emerald-50 text-emerald-700 p-1.5 rounded-lg text-[11px]"><i class="fab fa-whatsapp"></i></button></td>`;
-                tbody.appendChild(tr);
-            });
+            f.forEach(c => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-rose-600 block">${c.id}</span><span class="text-[10px] text-slate-400">${c.tgl_lapor}</span></td><td class="px-4 py-3"><div class="font-bold">${c.nama_pelapor}</div><div class="text-[10px] text-slate-500">${c.unit_pelapor}</div></td><td class="px-4 py-3"><div class="font-bold">${c.lokasi_cctv}</div><div class="text-[10px] text-slate-500">${formatTanggalIndo(c.tgl_kejadian)} (${formatJamIndo(c.jam_mulai)} - ${formatJamIndo(c.jam_selesai)} WIT)</div></td><td class="px-4 py-3 text-center">${getStatusBadge(c.status)}</td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratCctvA4('${c.id}')" class="bg-rose-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold">A4</button><button onclick="sendWaCctvToAdmin('${c.id}')" class="bg-emerald-50 text-emerald-700 p-1.5 rounded-lg text-[11px]"><i class="fab fa-whatsapp"></i></button></td>`; tbody.appendChild(tr); });
         }
 
         function renderAdminCctv() {
             const q = (document.getElementById('admSearchCctv')?.value || '').toLowerCase(), tbody = document.getElementById('adminCctvBody'); if (!tbody) return; tbody.innerHTML = '';
             const f = laporanCctvList.filter(c => String(c.id).toLowerCase().includes(q) || String(c.nama_pelapor).toLowerCase().includes(q) || String(c.lokasi_cctv).toLowerCase().includes(q));
             if (!f.length) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Belum ada laporan CCTV.</td></tr>`; return; }
-            f.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-rose-600 block">${c.id}</span><span class="text-[10px] text-slate-400">${c.tgl_lapor}</span></td><td class="px-4 py-3"><div class="font-bold">${c.nama_pelapor}</div><div class="text-[10px] text-slate-500">${c.identitas} | ${c.unit_pelapor}</div></td><td class="px-4 py-3"><div class="font-bold">${c.lokasi_cctv}</div><div class="text-[10px] text-slate-500">${formatTanggalIndo(c.tgl_kejadian)} (${formatJamIndo(c.jam_mulai)} - ${formatJamIndo(c.jam_selesai)} WIT)</div></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-rose-50 text-rose-700 rounded text-[10px] font-bold">${c.jenis_kejadian}</span><div class="truncate max-w-xs">${c.kronologi}</div></td><td class="px-4 py-3"><select onchange="quickUpdateStatusCctv('${c.id}', this.value)" class="w-full bg-slate-50 border rounded-lg px-2 py-1 text-[11px] font-bold"><option value="Menunggu Verifikasi" ${c.status === 'Menunggu Verifikasi' ? 'selected' : ''}>⏳ Menunggu</option><option value="Diverifikasi / Disposisi" ${c.status === 'Diverifikasi / Disposisi' ? 'selected' : ''}>🔍 Cek Rekaman</option><option value="Selesai" ${c.status === 'Selesai' ? 'selected' : ''}>✅ Selesai</option><option value="Ditolak" ${c.status === 'Ditolak' ? 'selected' : ''}>❌ Ditolak</option></select></td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratCctvA4('${c.id}')" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold">A4</button><button onclick="sendWaCctvToPelapor('${c.id}')" class="bg-emerald-500 text-white px-2.5 py-1.5 rounded-lg text-[11px]"><i class="fab fa-whatsapp"></i></button><button onclick="deleteCctv('${c.id}')" class="bg-rose-50 text-rose-600 p-1.5 rounded-lg text-[11px]"><i class="fas fa-trash"></i></button></td>`;
-                tbody.appendChild(tr);
-            });
+            f.forEach(c => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><span class="font-mono font-extrabold text-rose-600 block">${c.id}</span><span class="text-[10px] text-slate-400">${c.tgl_lapor}</span></td><td class="px-4 py-3"><div class="font-bold">${c.nama_pelapor}</div><div class="text-[10px] text-slate-500">${c.identitas} | ${c.unit_pelapor}</div></td><td class="px-4 py-3"><div class="font-bold">${c.lokasi_cctv}</div><div class="text-[10px] text-slate-500">${formatTanggalIndo(c.tgl_kejadian)} (${formatJamIndo(c.jam_mulai)} - ${formatJamIndo(c.jam_selesai)} WIT)</div></td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-rose-50 text-rose-700 rounded text-[10px] font-bold">${c.jenis_kejadian}</span><div class="truncate max-w-xs">${c.kronologi}</div></td><td class="px-4 py-3"><select onchange="quickUpdateStatusCctv('${c.id}', this.value)" class="w-full bg-slate-50 border rounded-lg px-2 py-1 text-[11px] font-bold"><option value="Menunggu Verifikasi" ${c.status === 'Menunggu Verifikasi' ? 'selected' : ''}>⏳ Menunggu</option><option value="Diverifikasi / Disposisi" ${c.status === 'Diverifikasi / Disposisi' ? 'selected' : ''}>🔍 Cek Rekaman</option><option value="Selesai" ${c.status === 'Selesai' ? 'selected' : ''}>✅ Selesai</option><option value="Ditolak" ${c.status === 'Ditolak' ? 'selected' : ''}>❌ Ditolak</option></select></td><td class="px-4 py-3 text-center whitespace-nowrap space-x-1"><button onclick="printSuratCctvA4('${c.id}')" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold">A4</button><button onclick="sendWaCctvToPelapor('${c.id}')" class="bg-emerald-500 text-white px-2 py-1.5 rounded-lg text-[11px]"><i class="fab fa-whatsapp"></i></button><button onclick="deleteCctv('${c.id}')" class="bg-rose-50 text-rose-600 p-1.5 rounded-lg text-[11px]"><i class="fas fa-trash"></i></button></td>`; tbody.appendChild(tr); });
         }
 
         async function quickUpdateStatusCctv(id, st) {
@@ -1304,20 +1512,14 @@
             laporanCctvList[idx].status = st; await pushToGoogleSheets('save_cctv', { data: laporanCctvList[idx], notify_target: 'pengaju' });
             Swal.fire({ icon: 'success', title: `Status CCTV: ${st}`, showCancelButton: true, confirmButtonColor: '#10b981', confirmButtonText: 'Kirim WA Pelapor' }).then(r => { if (r.isConfirmed) sendWaCctvToPelapor(id); });
         }
-
-        function sendWaCctvToPelapor(id) {
-            const c = laporanCctvList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase());
-            if (c) window.open(`https://wa.me/${formatPhoneToWa(c.kontak)}?text=${encodeURIComponent('*UPDATE AKSES CCTV BITD UMMU*\nYth. ' + c.nama_pelapor + ',\nKode: ' + c.id + '\nLokasi: ' + c.lokasi_cctv + '\nStatus: *' + c.status.toUpperCase() + '*\n\nSilakan menghubungi ruang layanan Biro BITD UMMU dengan membawa surat permohonan (A4) & identitas asli.')}`, '_blank');
-        }
-
+        function sendWaCctvToPelapor(id) { const c = laporanCctvList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (c) window.open(`https://wa.me/${formatPhoneToWa(c.kontak)}?text=${encodeURIComponent('*UPDATE AKSES CCTV BITD UMMU*\nKode: ' + c.id + '\nStatus: *' + c.status.toUpperCase() + '*')}`, '_blank'); }
         async function deleteCctv(id) { laporanCctvList = laporanCctvList.filter(c => String(c.id).toUpperCase() !== String(id).toUpperCase()); await pushToGoogleSheets('delete_cctv', { id: id }); }
 
         function printSuratCctvA4(id) {
             const c = laporanCctvList.find(x => String(x.id).toUpperCase() === String(id).toUpperCase()); if (!c) return;
             const logo = appSettings.kop_logo || appSettings.app_logo || DEFAULT_LOGO_UMMU;
-            const qr = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent('SURAT AKSES CCTV BITD UMMU | ' + c.id + ' | ' + c.nama_pelapor + ' | ' + c.status)}`;
+            const qr = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent('SURAT AKSES CCTV BITD UMMU | ' + c.id + ' | ' + c.nama_pelapor)}`;
             const jamMulaiClean = formatJamIndo(c.jam_mulai), jamSelesaiClean = formatJamIndo(c.jam_selesai);
-
             const win = window.open('', '_blank');
             win.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Formulir CCTV - ${c.id}</title><style>@page{size:A4 portrait;margin:16mm 20mm;}body{font-family:'Times New Roman',serif;font-size:11.5pt;color:#000;line-height:1.5;margin:0;background:#f1f5f9;}.page{width:210mm;min-height:297mm;margin:15px auto;background:#fff;padding:16mm 20mm;box-sizing:border-box;box-shadow:0 4px 18px rgba(0,0,0,0.08);}.header{display:flex;align-items:center;border-bottom:3px double #000;padding-bottom:10px;margin-bottom:18px;}.header img{width:72px;height:72px;object-fit:contain;margin-right:15px;}.header-text{text-align:center;flex:1;}.header-text h3{margin:0;font-size:13pt;text-transform:uppercase;}.header-text h2{margin:2px 0;font-size:14.5pt;text-transform:uppercase;}.header-text p{margin:0;font-size:9.5pt;font-style:italic;}table.info{width:100%;border-collapse:collapse;margin-bottom:16px;}table.info td{padding:5px 4px;vertical-align:top;}.kronologi-box{border:1px solid #000;padding:12px 14px;min-height:65px;margin-bottom:16px;text-align:justify;}.ttd-table{width:100%;margin-top:30px;border-collapse:collapse;page-break-inside:avoid;}.ttd-table td{width:50%;text-align:center;vertical-align:top;}@media print{.no-print{display:none!important;}body{background:#fff;}.page{width:100%;min-height:auto;margin:0;padding:0;box-shadow:none;}}</style></head><body><div class="no-print" style="text-align:right;padding:12px 24px;background:#fff;border-bottom:1px solid #e2e8f0;"><button onclick="window.print()" style="background:#e11d48;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">Cetak / Simpan PDF (A4)</button></div><div class="page"><div class="header"><img src="${logo}"><div class="header-text"><h3>${appSettings.kop_univ || defaultSettings.kop_univ}</h3><h2>${appSettings.kop_biro || defaultSettings.kop_biro}</h2><p>${appSettings.kop_alamat || defaultSettings.kop_alamat}</p></div></div><div style="text-align:center;margin-bottom:18px;"><h4 style="margin:0;text-decoration:underline;font-size:12.5pt;">FORMULIR LAPORAN KEJADIAN & PERMOHONAN AKSES REKAMAN CCTV</h4><div style="font-size:10.5pt;margin-top:3px;">Nomor Registrasi: <strong>${c.id}</strong></div></div><table class="info"><tr><td style="width:32%;">Nama Pelapor</td><td style="width:3%;">:</td><td><strong>${c.nama_pelapor}</strong> (ID: ${c.identitas})</td></tr><tr><td>Unit / Fakultas / WA</td><td>:</td><td>${c.unit_pelapor} / ${c.kontak}</td></tr><tr><td>Jenis Kejadian</td><td>:</td><td><strong>${c.jenis_kejadian}</strong></td></tr><tr><td>Lokasi & Waktu CCTV</td><td>:</td><td>${c.lokasi_cctv} | ${formatTanggalIndo(c.tgl_kejadian)}, Pukul <strong>${jamMulaiClean} s.d. ${jamSelesaiClean} WIT</strong></td></tr><tr><td>Keperluan / Status</td><td>:</td><td>${c.keperluan} — <strong>${c.status.toUpperCase()}</strong></td></tr></table><div style="font-weight:bold;margin-bottom:6px;">Kronologi Singkat:</div><div class="kronologi-box">${String(c.kronologi || '-').replace(/\n/g, '<br>')}</div><p style="font-size:10.5pt;text-align:justify;margin-bottom:24px;"><strong>Pernyataan Kerahasiaan:</strong> Saya menyatakan laporan ini benar dan bertanggung jawab menjaga kerahasiaan rekaman CCTV tanpa menyebarluaskannya tanpa izin resmi UMMU / BITD.</p><table class="ttd-table"><tr><td><div>Ternate, ${formatTanggalIndo(c.tgl_lapor)}</div><div style="font-weight:bold;">Pelapor,</div><div style="height:84px;"></div><div style="font-weight:bold;text-decoration:underline;">${c.nama_pelapor}</div><div style="font-size:10pt;">ID: ${c.identitas}</div></td><td><div>Mengetahui,</div><div style="font-weight:bold;margin-bottom:6px;">Kepala Biro BITD UMMU</div><div style="margin:6px auto;width:82px;padding:4px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;"><img src="${qr}" style="width:74px;height:74px;display:block;margin:0 auto;"></div><div style="font-weight:bold;text-decoration:underline;margin-top:4px;">Erwin Gunawan, S.Kom., M.MT</div><div style="font-size:10pt;">NIDN. 1217028302</div></td></tr></table></div></body></html>`);
             win.document.close();
@@ -1357,7 +1559,7 @@
             const q = (document.getElementById('publicSearchKeluar')?.value || '').toLowerCase(), tbody = document.getElementById('publicKeluarBody'); if (!tbody) return; tbody.innerHTML = '';
             const f = suratKeluarList.filter(i => String(i.no_surat).toLowerCase().includes(q) || String(i.tujuan).toLowerCase().includes(q) || String(i.perihal).toLowerCase().includes(q));
             if (!f.length) { tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-slate-400">Belum ada surat keluar.</td></tr>`; return; }
-            f.forEach(i => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><div class="font-mono font-extrabold text-indigo-600">${i.no_surat}</div><div class="text-[10px] text-slate-400">${formatTanggalIndo(i.tgl_surat)}</div></td><td class="px-4 py-3 font-bold">${i.tujuan}</td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[10px] font-bold">${i.jenis}</span><div>${i.perihal}</div></td><td class="px-4 py-3 text-center"><button onclick="cetakSuratKeluarById('${i.id}')" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold"><i class="fas fa-print"></i> A4</button></td>`; tbody.appendChild(tr); });
+            f.forEach(i => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="px-4 py-3 whitespace-nowrap"><div class="font-mono font-extrabold text-indigo-600">${i.no_surat}</div><div class="text-[10px] text-slate-400">${formatTanggalIndo(i.tgl_surat)}</div></td><td class="px-4 py-3 font-bold">${i.tujuan}</td><td class="px-4 py-3"><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[10px] font-bold">${i.jenis}</span><div>${i.perihal}</div></td><td class="px-4 py-3 text-center"><button onclick="cetakSuratKeluarById('${i.id}')" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold">A4</button></td>`; tbody.appendChild(tr); });
         }
         function renderAdminSuratKeluar() {
             const q = document.getElementById('admSearchKeluar').value.toLowerCase(), tbody = document.getElementById('adminKeluarBody'); tbody.innerHTML = '';
@@ -1386,7 +1588,7 @@
         // AUTH, EXPORT & INIT
         function handleAdminAccess() {
             if (isAdminLoggedIn) { switchMode('admin'); return; }
-            Swal.fire({ title: 'Login Admin BITD UMMU', html: `<div class="text-left space-y-2 mt-2"><input type="text" id="swalUser" class="w-full border rounded-xl p-2.5 text-sm" value="admin"><input type="password" id="swalPass" class="w-full border rounded-xl p-2.5 text-sm" placeholder="Password ()"></div>`, confirmButtonText: 'Masuk', showCancelButton: true, preConfirm: () => { if (document.getElementById('swalUser').value.trim() === 'admin' && document.getElementById('swalPass').value.trim() === 'Bismillah2026') return true; Swal.showValidationMessage('Salah!'); return false; } }).then(r => { if (r.isConfirmed) { isAdminLoggedIn = true; sessionStorage.setItem('bitd_admin_auth', 'true'); document.getElementById('btnLogout').classList.remove('hidden'); document.getElementById('btnLogout').classList.add('flex'); switchMode('admin'); } });
+            Swal.fire({ title: 'Login Admin BITD UMMU', html: `<div class="text-left space-y-2 mt-2"><input type="text" id="swalUser" class="w-full border rounded-xl p-2.5 text-sm" value="admin"><input type="password" id="swalPass" class="w-full border rounded-xl p-2.5 text-sm" placeholder="Password (bitd123)"></div>`, confirmButtonText: 'Masuk', showCancelButton: true, preConfirm: () => { if (document.getElementById('swalUser').value.trim() === 'admin' && document.getElementById('swalPass').value.trim() === 'bitd123') return true; Swal.showValidationMessage('Salah!'); return false; } }).then(r => { if (r.isConfirmed) { isAdminLoggedIn = true; sessionStorage.setItem('bitd_admin_auth', 'true'); document.getElementById('btnLogout').classList.remove('hidden'); document.getElementById('btnLogout').classList.add('flex'); switchMode('admin'); } });
         }
         function logoutAdmin() { isAdminLoggedIn = false; sessionStorage.removeItem('bitd_admin_auth'); document.getElementById('btnLogout').classList.add('hidden'); switchMode('public'); }
         function switchMode(mode) { document.getElementById('publicSection').classList.toggle('hidden', mode === 'admin'); document.getElementById('adminSection').classList.toggle('hidden', mode !== 'admin'); updateAllViews(); }
@@ -1394,6 +1596,7 @@
         function exportAgendaExcel() {
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(suratMasukList), "Surat Masuk");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(pengaduanNetList), "Pengaduan Jaringan");
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(jasaTeknisList), "Jasa Teknis");
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(suratKeluarList), "Surat Keluar");
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(laporanCctvList), "Laporan CCTV");
@@ -1409,7 +1612,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('pubTglSurat').value = new Date().toISOString().split('T')[0];
             if (isAdminLoggedIn) { document.getElementById('btnLogout').classList.remove('hidden'); document.getElementById('btnLogout').classList.add('flex'); }
-            applyLogoAndKopSettings(); loadDataFromCloud(false);
+            applyLogoAndKopSettings();
+            loadDataFromCloud(false);
+
+            // Deteksi Link Pengaduan Langsung (?menu=pengaduan)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('menu') === 'pengaduan') {
+                switchPublicTab('net');
+                openNetModal();
+            }
         });
     </script>
 </body>
